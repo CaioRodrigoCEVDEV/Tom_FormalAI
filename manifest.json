@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "Tom Tormal",
+    "version": "1.0",
+    "description": "Transformar textos informais em formais para whatsapp web",
+    "permissions": ["storage"],
+    
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "TomFormal",
+        "default_icon": {
+            "16": "icon16.png",
+            "48": "icon48.png",
+            "128": "icon128.png"
+        }
+    },
+
+    "content_scripts": [
+  {
+    "matches": [
+      "https://web.whatsapp.com/*",
+      "https://brsistemas.whatsprofissional.digital/*"
+     ],
+    "js": ["content.js"]
+  }
+ ]
+
+    
+}
