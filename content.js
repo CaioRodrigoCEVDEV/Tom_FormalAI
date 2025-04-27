@@ -90,15 +90,22 @@ sendToWhatsAppButton.disabled = true; // Começa desabilitado
 
 // Toggle mostrar/esconder painel
 toggleButton.onclick = () => {
+
+
     const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"]');
     
     if (chatInput) {
-        // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp
-        textarea.value = chatInput.innerText.trim();
+        // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp somente o que está selecionado
+        const selection = window.getSelection();
+        if (selection && selection.toString().trim()) {
+            textarea.value = selection.toString().trim();
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        } else {
+            alert("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
+        } 
     } else {
         alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
-    }
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    } 
 };
 
 // Botão formalizar texto
@@ -155,12 +162,15 @@ sendToWhatsAppButton.onclick = () => {
     if (chatInput) {
         chatInput.focus();
 
-
+        chatInput.innerText = "" // Limpa o campo de mensagem;
         chatInput.innerText = outputText; // Insere o texto formalizado no campo de mensagem
         
         // Cria um evento de inserção de texto
         const dataTransfer = new DataTransfer();
-        dataTransfer.setData(resultArea,outputText);
+       
+
+        // Insere o novo texto
+        dataTransfer.setData('text', outputText);
 
         const pasteEvent = new ClipboardEvent('paste', {
             clipboardData: dataTransfer,
@@ -171,9 +181,6 @@ sendToWhatsAppButton.onclick = () => {
     
         panel.style.display = 'none'; // Esconde o botão após o envio
         
-
-        
-
     } else {
         alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
     } 
