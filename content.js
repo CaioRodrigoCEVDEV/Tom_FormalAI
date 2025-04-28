@@ -9,9 +9,10 @@ toggleButton.style.right = "20px";
 toggleButton.style.zIndex = "9999";
 toggleButton.style.padding = "10px 20px";
 toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
-toggleButton.style.color = "white";
+
+//toggleButton.style.color = "white";
 toggleButton.style.border = "none";
-toggleButton.style.borderRadius = "5px";
+toggleButton.style.borderRadius = "100px";
 toggleButton.style.cursor = "pointer";
 toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
 
@@ -23,7 +24,7 @@ panel.style.right = '20px';
 panel.style.width = '300px';
 panel.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
 panel.style.border = '1px solid #ccc';
-panel.style.borderRadius = '8px';
+panel.style.borderRadius = '25px';
 panel.style.boxShadow = '0px 4px 8px rgba(0,0,0,0.2)';
 panel.style.padding = '15px';
 panel.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
@@ -42,6 +43,7 @@ textarea.style.border = '1px solid #ccc';
 textarea.style.resize = 'none';
 
 // Cria o botão de formalizar
+
 const formalizeButton = document.createElement('button');
 formalizeButton.innerText = "Formalizar";
 formalizeButton.style.width = '100%';
@@ -49,7 +51,7 @@ formalizeButton.style.padding = '10px';
 formalizeButton.style.backgroundColor = '#2196F3';
 formalizeButton.style.color = 'white';
 formalizeButton.style.border = 'none';
-formalizeButton.style.borderRadius = '4px';
+formalizeButton.style.borderRadius = '25px';
 formalizeButton.style.cursor = 'pointer';
 formalizeButton.style.marginBottom = '10px';
 
@@ -80,7 +82,7 @@ sendToWhatsAppButton.style.padding = '0px';
 sendToWhatsAppButton.style.backgroundColor = '#2196F3';
 sendToWhatsAppButton.style.color = 'white';
 sendToWhatsAppButton.style.border = 'none';
-sendToWhatsAppButton.style.borderRadius = '4px';
+sendToWhatsAppButton.style.borderRadius = '25px';
 sendToWhatsAppButton.style.cursor = 'pointer';
 sendToWhatsAppButton.style.marginBottom = '10px';
 sendToWhatsAppButton.disabled = true; // Começa desabilitado
@@ -100,6 +102,7 @@ toggleButton.onclick = () => {
         if (selection && selection.toString().trim()) {
             textarea.value = selection.toString().trim();
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            //document.getElementById('formalizarBtn').click();
         } else {
             alert("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
         } 
