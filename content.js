@@ -77,6 +77,7 @@ resultArea.innerText = 'Texto formalizado aparecerá aqui.';
 
 // Botão para enviar para o WhatsApp
 const sendToWhatsAppButton = document.createElement('button');
+sendToWhatsAppButton.id = 'sendToWhatsAppButton';
 sendToWhatsAppButton.innerText = "";
 sendToWhatsAppButton.style.width = '100%';
 sendToWhatsAppButton.style.padding = '0px';
@@ -106,7 +107,10 @@ toggleButton.onclick = () => {
             if (selection && selection.toString().trim()) {
             textarea.value = selection.toString().trim();
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            //document.getElementById('formalizarBtn').click();
+            
+            // Adiciona o evento de clique no botão de formalizar
+            //formalizeButton.click();
+
             }  else {
             alert("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
             }
@@ -114,6 +118,13 @@ toggleButton.onclick = () => {
         else {
             // Se o painel já estiver visível, apenas o esconde
             panel.style.display = 'none'
+            resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
+            textarea.value = ''; // Limpa o textarea
+            sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
+            sendToWhatsAppButton.style.padding ='0px'  ; // remove o padding
+            sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
+            sendToWhatsAppButton.style.backgroundColor = '#2196F3'; // Cor cinza para indicar que está desabilitado
+            
         }
     } else {
         alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
@@ -189,7 +200,11 @@ sendToWhatsAppButton.onclick = () => {
             bubbles: true
         });
         chatInput.dispatchEvent(pasteEvent);
-
+        resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
+        textarea.value = ''; // Limpa o textarea
+        sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
+        sendToWhatsAppButton.style.padding ='0px'  ; // remove o padding
+        sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
         panel.style.display = 'none'; // Esconde o botão após o envio
     } else {
         alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
