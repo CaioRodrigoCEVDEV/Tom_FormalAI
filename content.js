@@ -152,6 +152,8 @@ panel.appendChild(resultArea);
 document.body.appendChild(toggleButton);
 document.body.appendChild(panel);
 
+
+
 sendToWhatsAppButton.onclick = () => {
     const outputText = resultArea.innerText.trim();
     if (!outputText) {
@@ -159,45 +161,34 @@ sendToWhatsAppButton.onclick = () => {
         return;
     }
 
-    // Tenta encontrar o campo de digitar no WhatsApp
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input.w-full.rounded-full.bg-gray-100');
-        
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],input.w-full.rounded-full.bg-gray-100');
+
     if (chatInput) {
         chatInput.focus();
-        // Insere o texto formalizado no campo de mensagem
-        // Se o campo for um textarea, usa value, caso contrário, usa innerText por conta do WhatsAppProfisseional usar frameworks diferentes
-        
-        if (chatInput.tagName.toLowerCase() === 'input') {
-            chatInput.value = "";          // Limpa o campo
-            chatInput.innerText = outputText.trim()+"000";   // Insere o texto formalizado
-            // Disparar o evento "input" manualmente
-            const inputEvent = new Event('input', { bubbles: true });
-            chatInput.dispatchEvent(inputEvent);
 
-        } else {
-        chatInput.innerText = "" // Limpa o campo de mensagem;
-        chatInput.innerText = outputText; // Insere o texto formalizado no campo de mensagem
-        }
-        // Cria um evento de inserção de texto
+        // Seta o valor no campo de input
+        chatInput.value = outputText;
+
+        // Dispara o evento de input para que o sistema reconheça
+        chatInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+        // Se quiser simular o paste (opcional, pode ajudar em alguns casos)
         const dataTransfer = new DataTransfer();
-       
-
-        // Insere o novo texto
-        dataTransfer.setData('text', outputText);
-
+        dataTransfer.setData('text/plain', outputText);
         const pasteEvent = new ClipboardEvent('paste', {
             clipboardData: dataTransfer,
             bubbles: true
         });
-
         chatInput.dispatchEvent(pasteEvent);
-    
+
         panel.style.display = 'none'; // Esconde o botão após o envio
-        
     } else {
         alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
-    } 
+    }
 };
+
+
+
 // Adiciona o botão de enviar para WhatsApp ao painel
 
 // Função que chama a OpenAI
