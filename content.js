@@ -94,7 +94,7 @@ sendToWhatsAppButton.disabled = true; // Começa desabilitado
 toggleButton.onclick = () => {
 
 
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], textarea');
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input');
     
     if (chatInput) {
         // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp somente o que está selecionado
@@ -160,16 +160,20 @@ sendToWhatsAppButton.onclick = () => {
     }
 
     // Tenta encontrar o campo de digitar no WhatsApp
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], #grouped-demo');
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input.w-full.rounded-full.bg-gray-100');
         
     if (chatInput) {
         chatInput.focus();
         // Insere o texto formalizado no campo de mensagem
         // Se o campo for um textarea, usa value, caso contrário, usa innerText por conta do WhatsAppProfisseional usar frameworks diferentes
         
-        if (chatInput.tagName.toLowerCase() === 'textarea') {
-            chatInput.value = '';          // Limpa o campo
-            chatInput.value = outputText;   // Insere o texto formalizado
+        if (chatInput.tagName.toLowerCase() === 'input') {
+            chatInput.value = "";          // Limpa o campo
+            chatInput.innerText = outputText.trim()+"000";   // Insere o texto formalizado
+            // Disparar o evento "input" manualmente
+            const inputEvent = new Event('input', { bubbles: true });
+            chatInput.dispatchEvent(inputEvent);
+
         } else {
         chatInput.innerText = "" // Limpa o campo de mensagem;
         chatInput.innerText = outputText; // Insere o texto formalizado no campo de mensagem
