@@ -19,7 +19,7 @@ toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
 // Cria o painel oculto inicialmente
 const panel = document.createElement('div');
 panel.style.position = 'fixed';
-panel.style.bottom = '110px'; // um pouco acima do botão
+panel.style.bottom = '120px'; // um pouco acima do botão
 panel.style.right = '20px';
 panel.style.width = '300px';
 panel.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
@@ -33,6 +33,7 @@ panel.style.display = 'none'; // começa oculto
 
 // Cria o textarea para digitar
 const textarea = document.createElement('textarea');
+textarea.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
 textarea.placeholder = 'Digite seu texto aqui...';
 textarea.style.width = '100%';
 textarea.style.height = '100px';
@@ -41,6 +42,7 @@ textarea.style.padding = '0px';
 textarea.style.borderRadius = '4px';
 textarea.style.border = '1px solid #ccc';
 textarea.style.resize = 'none';
+textarea.style.backgroundColor = '#f9f9f9';
 
 // Cria o botão de formalizar
 
