@@ -101,13 +101,21 @@ toggleButton.onclick = () => {
     if (chatInput) {
         // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp somente o que está selecionado
         const selection = window.getSelection();
-        if (selection && selection.toString().trim()) {
+        if (panel.style.display === 'none') {
+            // Verifica se há texto selecionado
+       
+            if (selection && selection.toString().trim()) {
             textarea.value = selection.toString().trim();
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
             //document.getElementById('formalizarBtn').click();
-        } else {
+            }  else {
             alert("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
+            }
         } 
+        else {
+            // Se o painel já estiver visível, apenas o esconde
+            panel.style.display = 'none'
+        }
     } else {
         alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
     } 
