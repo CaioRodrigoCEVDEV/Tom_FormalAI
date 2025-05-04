@@ -128,7 +128,14 @@ toggleButton.onclick = () => {
             
         }
     } else {
-        alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+            if (panel.style.display === 'block') {
+                // Se o painel já estiver visível, apenas o esconde
+                panel.style.display = 'none'
+                }
+            else {
+                alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+            }
+        // Se o painel já estiver visível, apenas o esconde
     } 
 };
 
