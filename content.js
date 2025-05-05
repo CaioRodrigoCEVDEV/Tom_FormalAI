@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
 
         if (isDark(bgColor)) { 
 
-            // Aplica o tema claro
+            // Aplica o tema escuro
             console.log("Tema escuro ativado");
             toggleButton.style.fontWeight = "bold";
             toggleButton.style.fontSize = "12px";
@@ -36,7 +36,9 @@ window.addEventListener("load", () => {
             toggleButton.style.borderRadius = "100px";
             toggleButton.style.cursor = "pointer";
             toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+            toggleButton.style.backgroundColor = "#242626"; 
             toggleButton.style.color = "white";
+            toggleButton.style.fontWeight = "bold";
 
             // hover
             toggleButton.addEventListener("mouseenter", () => {
@@ -44,7 +46,7 @@ window.addEventListener("load", () => {
                 toggleButton.style.color = "black";
             });
             toggleButton.addEventListener("mouseleave", () => {
-                toggleButton.style.backgroundColor = "";
+                toggleButton.style.backgroundColor = "#242626"; 
                 toggleButton.style.color = "white";
             });
         } else {
@@ -64,6 +66,7 @@ window.addEventListener("load", () => {
         toggleButton.style.borderRadius = "100px";
         toggleButton.style.cursor = "pointer";
         toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+        toggleButton.style.fontWeight = "bold";
 
         // hover
         toggleButton.addEventListener("mouseenter", () => {
@@ -71,7 +74,7 @@ window.addEventListener("load", () => {
             toggleButton.style.color = "white";
         });
         toggleButton.addEventListener("mouseleave", () => {
-            toggleButton.style.backgroundColor = "";
+            toggleButton.style.backgroundColor = "white";
             toggleButton.style.color = "black";
         });
         }
