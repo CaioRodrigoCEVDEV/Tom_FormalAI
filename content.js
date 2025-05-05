@@ -113,7 +113,7 @@ toggleButton.onclick = () => {
             //formalizeButton.click();
 
             }  else {
-            alert("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
+            alertPesonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
             }
         } 
         else {
@@ -133,7 +133,8 @@ toggleButton.onclick = () => {
                 panel.style.display = 'none'
                 }
             else {
-                alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+                //alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+                alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
             }
         // Se o painel já estiver visível, apenas o esconde
     } 
@@ -143,7 +144,7 @@ toggleButton.onclick = () => {
 formalizeButton.onclick = async () => {
     const inputText = textarea.value.trim();
     if (!inputText) {
-        alert("Por favor, digite um texto.");
+        alertPesonalizado("Por favor, digite um texto.");
         return;
     }
 
@@ -185,7 +186,7 @@ document.body.appendChild(panel);
 sendToWhatsAppButton.onclick = () => {
     const outputText = resultArea.innerText.trim();
     if (!outputText) {
-        alert("Nenhum texto formalizado encontrado.");
+        alertPesonalizado("Nenhum texto formalizado encontrado.");
         return;
     }
 
@@ -215,7 +216,7 @@ sendToWhatsAppButton.onclick = () => {
         sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
         panel.style.display = 'none'; // Esconde o botão após o envio
     } else {
-        alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+        alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
     }
 };
 
@@ -251,3 +252,34 @@ async function sendToOpenAI(text) {
     const data = await response.json();
     return data.choices[0].message.content.trim();
 }
+// alertPesonalizado personalizado
+function alertPesonalizado(message) {
+    let toast = document.getElementById("toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toast";
+      toast.style = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: #fff;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+      `;
+      document.body.appendChild(toast);
+    }
+  
+    toast.textContent = message;
+    toast.style.opacity = "1";
+  
+    setTimeout(() => {
+      toast.style.opacity = "0";
+    }, 4000);
+  }
+  
