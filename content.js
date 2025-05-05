@@ -254,11 +254,11 @@ async function sendToOpenAI(text) {
 }
 // alertPesonalizado personalizado
 function alertPesonalizado(message) {
-    let toast = document.getElementById("toast");
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.id = "toast";
-      toast.style = `
+    let alertPesonalizado = document.getElementById("alertPesonalizado");
+    if (!alertPesonalizado) {
+        alertPesonalizado = document.createElement("div");
+        alertPesonalizado.id = "alertPesonalizado";
+        alertPesonalizado.style = `
         position: fixed;
         bottom: 30px;
         left: 50%;
@@ -272,14 +272,15 @@ function alertPesonalizado(message) {
         opacity: 0;
         transition: opacity 0.3s;
       `;
-      document.body.appendChild(toast);
+      document.body.appendChild(alertPesonalizado);
     }
   
-    toast.textContent = message;
-    toast.style.opacity = "1";
+    alertPesonalizado.textContent = message;
+    alertPesonalizado.style.opacity = "1";
   
     setTimeout(() => {
-      toast.style.opacity = "0";
+        alertPesonalizado.style.opacity = "0";
+        alertPesonalizado.remove(); 
     }, 4000);
   }
   
