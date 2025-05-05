@@ -10,8 +10,30 @@ toggleButton.style.right = "20px";
 toggleButton.style.zIndex = "9999";
 toggleButton.style.padding = "10px 20px";
 //toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
-//toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
-toggleButton.style.hover
+
+/* FAZER FUNFAR MAIS TARDE, DETECTAR INPUT DO WHATSAPP
+
+document.body.appendChild(toggleButton);
+
+const esperarCampo = setInterval(() => {
+  const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"]');
+
+  if (chatInput) {
+    clearInterval(esperarCampo); // Para o loop
+
+    chatInput.addEventListener('input', function () {
+      const texto = chatInput.innerText;
+      if (texto && texto.trim().length > 0) {
+        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
+        toggleButton.style.color = "black";
+      } else {
+            toggleButton.style.backgroundColor = "";
+            toggleButton.style.color = "white";}
+    });
+  }
+}, 1000); // Tenta a cada 1 segundo
+ */
+
 
 //toggleButton.style.color = "white";
 toggleButton.style.border = "none";
@@ -34,8 +56,9 @@ panel.style.position = 'fixed';
 panel.style.bottom = '120px'; // um pouco acima do botão
 panel.style.right = '20px';
 panel.style.width = '300px';
-panel.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
+panel.style.backgroundColor = ""; // Cor verde do WhatsApp
 panel.style.border = '1px solid #ccc';
+panel.style.borderColor = "rgb(33, 192, 99)";
 panel.style.borderRadius = '25px';
 panel.style.boxShadow = '0px 4px 8px rgba(0,0,0,0.2)';
 panel.style.padding = '15px';
@@ -64,10 +87,21 @@ formalizeButton.style.width = '100%';
 formalizeButton.style.padding = '10px';
 formalizeButton.style.backgroundColor = '#2196F3';
 formalizeButton.style.color = 'white';
-formalizeButton.style.border = 'none';
+formalizeButton.style.border = '1px solid #ccc';
+formalizeButton.style.borderColor = "rgb(33, 192, 99)";
 formalizeButton.style.borderRadius = '25px';
 formalizeButton.style.cursor = 'pointer';
 formalizeButton.style.marginBottom = '10px';
+
+
+formalizeButton.addEventListener("mouseenter", () => {
+    formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
+    formalizeButton.style.color = "black";
+});
+formalizeButton.addEventListener("mouseleave", () => {
+    formalizeButton.style.backgroundColor = "";
+    formalizeButton.style.color = "white";
+});
 
 // Cria a área de resultado
 const resultArea = document.createElement('div');
@@ -96,13 +130,23 @@ sendToWhatsAppButton.style.width = '100%';
 sendToWhatsAppButton.style.padding = '0px';
 sendToWhatsAppButton.style.backgroundColor = '#2196F3';
 sendToWhatsAppButton.style.color = 'white';
-sendToWhatsAppButton.style.border = 'none';
+sendToWhatsAppButton.style.border = '1px solid #ccc';
+sendToWhatsAppButton.style.borderColor = "rgb(33, 192, 99)";
 sendToWhatsAppButton.style.borderRadius = '25px';
 sendToWhatsAppButton.style.cursor = 'pointer';
 sendToWhatsAppButton.style.marginBottom = '10px';
 sendToWhatsAppButton.disabled = true; // Começa desabilitado
 //sendToWhatsAppButton.style.visibility = 'hidden'; // Começa invisível
 
+
+sendToWhatsAppButton.addEventListener("mouseenter", () => {
+    sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
+    sendToWhatsAppButton.style.color = "black";
+});
+sendToWhatsAppButton.addEventListener("mouseleave", () => {
+    sendToWhatsAppButton.style.backgroundColor = "";
+    sendToWhatsAppButton.style.color = "white";
+});
 
 
 // Toggle mostrar/esconder painel
@@ -263,7 +307,7 @@ async function sendToOpenAI(text) {
 
     const data = await response.json();
     return data.choices[0].message.content.trim();
-}
+};
 // alertPesonalizado personalizado
 function alertPesonalizado(message) {
     let alertPesonalizado = document.getElementById("alertPesonalizado");
@@ -294,5 +338,4 @@ function alertPesonalizado(message) {
         alertPesonalizado.style.opacity = "0";
         alertPesonalizado.remove(); 
     }, 4000);
-  }
-  
+  };
