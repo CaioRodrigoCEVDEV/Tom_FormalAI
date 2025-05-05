@@ -1,18 +1,105 @@
 // Cria o botão flutuante inicial
-const toggleButton = document.createElement('button');
-toggleButton.innerText = "F";
-toggleButton.style.position = "fixed";
-toggleButton.style.bottom = "70px";
-toggleButton.style.right = "20px";
-toggleButton.style.zIndex = "9999";
-toggleButton.style.padding = "10px 20px";
-toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
+const toggleButton = document.createElement("button");
+toggleButton.textContent = "F";
+document.body.appendChild(toggleButton);
+
+// Verifica se a página é predominantemente escura ou clara
+// Verifica a cor de fundo do body
+
+const bgColor = window.getComputedStyle(document.body).backgroundColor;
+console.log("bgcolor:", bgColor);
+// Função para verificar se a cor é escura
+function isDark(color) {
+    const rgb = bgColor.match(/\d+/g).map(Number);
+    const luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+    return luminance < 128; // valor de corte, pode ajustar conforme necessário
+  }
+
+if (isDark(bgColor)) { 
+
+    // Aplica o tema claro
+    console.log("Tema escuro ativado");
+    toggleButton.style.fontWeight = "bold";
+    toggleButton.style.fontSize = "12px";
+    toggleButton.style.color = "white";
+    toggleButton.style.position = "fixed";
+    toggleButton.style.bottom = "70px";
+    toggleButton.style.right = "20px";
+    toggleButton.style.zIndex = "9999";
+    toggleButton.style.padding = "10px 20px";
+    toggleButton.style.border = "none";
+    toggleButton.style.borderRadius = "100px";
+    toggleButton.style.cursor = "pointer";
+    toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+    toggleButton.style.color = "white";
+
+    // hover
+    toggleButton.addEventListener("mouseenter", () => {
+        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
+        toggleButton.style.color = "black";
+    });
+    toggleButton.addEventListener("mouseleave", () => {
+        toggleButton.style.backgroundColor = "";
+        toggleButton.style.color = "white";
+    });
+} else {
+
+  // Aplica o tema claro
+  console.log("Tema claro ativado");
+
+  toggleButton.style.fontWeight = "bold";
+  toggleButton.style.fontSize = "12px";
+  toggleButton.style.color = "black";
+  toggleButton.style.position = "fixed";
+  toggleButton.style.bottom = "70px";
+  toggleButton.style.right = "20px";
+  toggleButton.style.zIndex = "9999";
+  toggleButton.style.padding = "10px 20px";
+  toggleButton.style.border = "none";
+  toggleButton.style.borderRadius = "100px";
+  toggleButton.style.cursor = "pointer";
+  toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+
+  // hover
+  toggleButton.addEventListener("mouseenter", () => {
+      toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
+      toggleButton.style.color = "black";
+  });
+  toggleButton.addEventListener("mouseleave", () => {
+      toggleButton.style.backgroundColor = "";
+      toggleButton.style.color = "black";
+  });
+}
+
+//toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
+
+/* FAZER FUNFAR MAIS TARDE, DETECTAR INPUT DO WHATSAPP
+
+document.body.appendChild(toggleButton);
+
+const esperarCampo = setInterval(() => {
+  const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"]');
+
+  if (chatInput) {
+    clearInterval(esperarCampo); // Para o loop
+
+    chatInput.addEventListener('input', function () {
+      const texto = chatInput.innerText;
+      if (texto && texto.trim().length > 0) {
+        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
+        toggleButton.style.color = "black";
+      } else {
+            toggleButton.style.backgroundColor = "";
+            toggleButton.style.color = "white";}
+    });
+  }
+}, 1000); // Tenta a cada 1 segundo
+ */
+
 
 //toggleButton.style.color = "white";
-toggleButton.style.border = "none";
-toggleButton.style.borderRadius = "100px";
-toggleButton.style.cursor = "pointer";
-toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+
+
 
 // Cria o painel oculto inicialmente
 const panel = document.createElement('div');
