@@ -5,9 +5,14 @@ document.body.appendChild(toggleButton);
 
 // Verifica se a página é predominantemente escura ou clara
 // Verifica a cor de fundo do body
-
-const bgColor = window.getComputedStyle(document.body).backgroundColor;
-console.log("bgcolor:", bgColor);
+//aguarda o carregamento da página
+//window.addEventListener("load", async () => {
+window.addEventListener("load", () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    console.log(bgColor);
+  
+//const bgColor = await window.getComputedStyle(document.body).backgroundColor;
+//console.log("bgcolor:", bgColor);
 // Função para verificar se a cor é escura
 function isDark(color) {
     const rgb = bgColor.match(/\d+/g).map(Number);
@@ -63,13 +68,13 @@ if (isDark(bgColor)) {
   // hover
   toggleButton.addEventListener("mouseenter", () => {
       toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-      toggleButton.style.color = "black";
+      toggleButton.style.color = "white";
   });
   toggleButton.addEventListener("mouseleave", () => {
       toggleButton.style.backgroundColor = "";
       toggleButton.style.color = "black";
   });
-}
+}});
 
 //toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
 
