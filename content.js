@@ -1,54 +1,18 @@
 // Cria o botão flutuante inicial
 const toggleButton = document.createElement('button');
 toggleButton.innerText = "F";
-toggleButton.style.fontWeight = "bold";
-toggleButton.style.fontSize= "12";
-toggleButton.style.color = "white"
 toggleButton.style.position = "fixed";
 toggleButton.style.bottom = "70px";
 toggleButton.style.right = "20px";
 toggleButton.style.zIndex = "9999";
 toggleButton.style.padding = "10px 20px";
-//toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
-
-/* FAZER FUNFAR MAIS TARDE, DETECTAR INPUT DO WHATSAPP
-
-document.body.appendChild(toggleButton);
-
-const esperarCampo = setInterval(() => {
-  const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"]');
-
-  if (chatInput) {
-    clearInterval(esperarCampo); // Para o loop
-
-    chatInput.addEventListener('input', function () {
-      const texto = chatInput.innerText;
-      if (texto && texto.trim().length > 0) {
-        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-        toggleButton.style.color = "black";
-      } else {
-            toggleButton.style.backgroundColor = "";
-            toggleButton.style.color = "white";}
-    });
-  }
-}, 1000); // Tenta a cada 1 segundo
- */
-
+toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
 
 //toggleButton.style.color = "white";
 toggleButton.style.border = "none";
 toggleButton.style.borderRadius = "100px";
 toggleButton.style.cursor = "pointer";
 toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
-
-toggleButton.addEventListener("mouseenter", () => {
-    toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-    toggleButton.style.color = "black";
-});
-toggleButton.addEventListener("mouseleave", () => {
-    toggleButton.style.backgroundColor = "";
-    toggleButton.style.color = "white";
-});
 
 // Cria o painel oculto inicialmente
 const panel = document.createElement('div');
