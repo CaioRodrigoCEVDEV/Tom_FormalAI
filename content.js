@@ -7,12 +7,14 @@ const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
 
-const darkmode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-console.log("Dark mode preference:", darkmode);
+// Verifica se a página tem a tag dark
+const bodyStyle = getComputedStyle(document.body);
+const hasDarkTag = bodyStyle.backgroundColor === 'rgb(250, 250, 250)'; // #fafafa in RGB
+console.log("Has dark tag:", hasDarkTag);
 
-// Verifica se o tema escuro está ativado
-if (darkmode) {
-    // Se o tema escuro estiver ativado, aplique o estilo escuro
+// Força a verificação apenas com base na tag da página
+if (!hasDarkTag) {
+    // Se a tag dark estiver presente, aplique o estilo escuro
     console.log("Tema escuro ativado");
 
     toggleButton.style.fontWeight = "bold";
@@ -27,7 +29,8 @@ if (darkmode) {
     toggleButton.style.borderRadius = "100px";
     toggleButton.style.cursor = "pointer";
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
-        toggleButton.style.color = "white";
+    toggleButton.style.color = "white";
+
     // hover
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
@@ -38,7 +41,7 @@ if (darkmode) {
         toggleButton.style.color = "white";
     });
 } else {
-    // Se o tema escuro não estiver ativado, aplique o estilo claro
+    // Se a tag dark não estiver presente, aplique o estilo claro
     console.log("Tema claro ativado");
 
     toggleButton.style.fontWeight = "bold";
