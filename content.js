@@ -10,10 +10,10 @@ const bgColor = window.getComputedStyle(document.body).backgroundColor;
 console.log("bgcolor:", bgColor);
 // Função para verificar se a cor é escura
 function isDark(color) {
-        const rgb = color.match(/\d+/g).map(Number);
-        const luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
-        return luminance < 128; // valor de corte, pode ajustar conforme necessário
-}
+    const rgb = bgColor.match(/\d+/g).map(Number);
+    const luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+    return luminance < 128; // valor de corte, pode ajustar conforme necessário
+  }
 
 if (isDark(bgColor)) {
 
