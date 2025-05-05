@@ -15,7 +15,7 @@ function isDark(color) {
     return luminance < 128; // valor de corte, pode ajustar conforme necessário
   }
 
-if (isDark(bgColor)) {
+if (isDark(bgColor)) { 
 
     // Aplica o tema claro
     console.log("Tema escuro ativado");
