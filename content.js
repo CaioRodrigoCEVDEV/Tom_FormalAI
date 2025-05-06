@@ -238,7 +238,7 @@ window.addEventListener("load", () => {
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
         sendToWhatsAppButton.style.backgroundColor = "";
         sendToWhatsAppButton.style.color = "white";
-    });
+    }); 
 
 } else {
     // Se a tag dark não estiver presente, aplique o estilo claro
