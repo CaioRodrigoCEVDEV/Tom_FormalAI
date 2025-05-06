@@ -1,84 +1,23 @@
-// Cria o botão flutuante inicial
+
 const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
 
-// Verifica se a página é predominantemente escura ou clara
-// Verifica a cor de fundo do body
-//aguarda o carregamento da página
-//window.addEventListener("load", async () => {
-window.addEventListener("load", () => {
-    const bgColor = window.getComputedStyle(document.body).backgroundColor;
-    console.log(bgColor);
-  
-        //const bgColor = await window.getComputedStyle(document.body).backgroundColor;
-        //console.log("bgcolor:", bgColor);
-        // Função para verificar se a cor é escura
-        function isDark(color) {
-            const rgb = bgColor.match(/\d+/g).map(Number);
-            const luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
-            return luminance < 128; // valor de corte, pode ajustar conforme necessário
-        }
-
-        if (isDark(bgColor)) { 
-
-            // Aplica o tema escuro
-            console.log("Tema escuro ativado");
-            toggleButton.style.fontWeight = "bold";
-            toggleButton.style.fontSize = "12px";
-            toggleButton.style.color = "white";
-            toggleButton.style.position = "fixed";
-            toggleButton.style.bottom = "70px";
-            toggleButton.style.right = "20px";
-            toggleButton.style.zIndex = "9999";
-            toggleButton.style.padding = "10px 20px";
-            toggleButton.style.border = "none";
-            toggleButton.style.borderRadius = "100px";
-            toggleButton.style.cursor = "pointer";
-            toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
-            toggleButton.style.backgroundColor = "#242626"; 
-            toggleButton.style.color = "white";
-            toggleButton.style.fontWeight = "bold";
-
-            // hover
-            toggleButton.addEventListener("mouseenter", () => {
-                toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-                toggleButton.style.color = "black";
-            });
-            toggleButton.addEventListener("mouseleave", () => {
-                toggleButton.style.backgroundColor = "#242626"; 
-                toggleButton.style.color = "white";
-            });
-        } else {
-
-        // Aplica o tema claro
-        console.log("Tema claro ativado");
-
-        toggleButton.style.fontWeight = "bold";
-        toggleButton.style.fontSize = "12px";
-        toggleButton.style.color = "black";
-        toggleButton.style.position = "fixed";
-        toggleButton.style.bottom = "70px";
-        toggleButton.style.right = "20px";
-        toggleButton.style.zIndex = "9999";
-        toggleButton.style.padding = "10px 20px";
-        toggleButton.style.border = "none";
-        toggleButton.style.borderRadius = "100px";
-        toggleButton.style.cursor = "pointer";
-        toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
-        toggleButton.style.fontWeight = "bold";
-
-        // hover
-        toggleButton.addEventListener("mouseenter", () => {
-            toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-            toggleButton.style.color = "white";
-        });
-        toggleButton.addEventListener("mouseleave", () => {
-            toggleButton.style.backgroundColor = "white";
-            toggleButton.style.color = "black";
-        });
-        }
-});
+//painel oculto inicialmente
+const panel = document.createElement('div');
+    panel.style.position = 'fixed';
+    panel.style.bottom = '120px';
+    panel.style.right = '20px';
+    panel.style.width = '300px';
+    panel.style.backgroundColor = "rgb(36, 38, 38)"; 
+    panel.style.border = '1px solid #ccc';
+    panel.style.borderColor = "rgb(33, 192, 99)";
+    panel.style.borderRadius = '25px';
+    panel.style.boxShadow = '0px 4px 8px rgba(0,0,0,0.2)';
+    panel.style.padding = '15px';
+    panel.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
+    panel.style.fontFamily = 'Arial, sans-serif';
+    panel.style.display = 'none';
 
 //toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
 
@@ -107,25 +46,7 @@ const esperarCampo = setInterval(() => {
 
 //toggleButton.style.color = "white";
 
-
-
-// Cria o painel oculto inicialmente
-const panel = document.createElement('div');
-panel.style.position = 'fixed';
-panel.style.bottom = '120px'; // um pouco acima do botão
-panel.style.right = '20px';
-panel.style.width = '300px';
-panel.style.backgroundColor = ""; // Cor verde do WhatsApp
-panel.style.border = '1px solid #ccc';
-panel.style.borderColor = "rgb(33, 192, 99)";
-panel.style.borderRadius = '25px';
-panel.style.boxShadow = '0px 4px 8px rgba(0,0,0,0.2)';
-panel.style.padding = '15px';
-panel.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
-panel.style.fontFamily = 'Arial, sans-serif';
-panel.style.display = 'none'; // começa oculto
-
-// Cria o textarea para digitar
+//textarea para digitar
 const textarea = document.createElement('textarea');
 textarea.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
 textarea.placeholder = 'Digite seu texto aqui...';
@@ -238,7 +159,7 @@ window.addEventListener("load", () => {
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
         sendToWhatsAppButton.style.backgroundColor = "";
         sendToWhatsAppButton.style.color = "white";
-    }); 
+    });
 
 } else {
     // Se a tag dark não estiver presente, aplique o estilo claro
@@ -333,7 +254,7 @@ toggleButton.onclick = () => {
                 alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
             }
         
-    } 
+    }
 };
 
 // Botão formalizar texto
