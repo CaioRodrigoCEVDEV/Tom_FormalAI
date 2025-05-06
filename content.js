@@ -270,15 +270,16 @@ formalizeButton.onclick = async () => {
     formalizeButton.disabled = true;
     //formalizeButton.innerText = "Formalizando...";
     try {
-        const formalizedText = await sendToOpenAI(inputText);
-        resultArea.innerText = formalizedText;
-        sendToWhatsAppButton.disabled = false; // Habilita o botão do WhatsApp
+        const formalizedText = await sendToOpenAI('"' + inputText + '"');
+        // Remove as aspas do início e do fim do texto formalizado
+        resultArea.innerText = formalizedText.replace(/^"|"$/g, '');
     } catch (error) {
         console.error("Erro ao formalizar:", error);
         resultArea.innerText = "Erro ao formalizar o texto.";
-    }finally {
+    } finally {
         formalizeButton.disabled = false;
-        formalizeButton.innerText = "Formalizar";}
+        formalizeButton.innerText = "Formalizar";
+    }
 };
 
 
@@ -341,7 +342,7 @@ async function sendToOpenAI(text) {
         body: JSON.stringify({
             model: "gpt-3.5-turbo",
             messages: [
-                { role: "system", content: "realizar ajustes no tom do texto inserido, mantendo o conteúdo principal intacto e alterando apenas o estilo ou tom da frase" },
+                { role: "system", content: "Reescreva apenas a frase enviada pelo usuário, mudando apenas o tom (mais formal, informal, simpático etc.), sem adicionar ou remover informações. Apenas reformule, não comente." },
                 { role: "user", content: text }
             ],
             max_tokens: 500
