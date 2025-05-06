@@ -105,7 +105,6 @@ const esperarCampo = setInterval(() => {
 }, 1000); // Tenta a cada 1 segundo
  */
 
-
 //toggleButton.style.color = "white";
 
 
@@ -134,18 +133,17 @@ textarea.style.width = '100%';
 textarea.style.height = '100px';
 textarea.style.marginBottom = '10px';
 textarea.style.padding = '0px';
-textarea.style.borderRadius = '4px';
-textarea.style.border = '1px solid #ccc';
-textarea.style.resize = 'none';
-textarea.style.backgroundColor = '#f9f9f9';
+textarea.style.borderRadius = '5px';
+textarea.style.color = 'white';
+textarea.style.backgroundColor = "rgb(36, 38, 38)"; 
+textarea.style.border = 'none';
 
-// Cria o botão de formalizar
-
+//botão de formalizar
 const formalizeButton = document.createElement('button');
 formalizeButton.innerText = "Formalizar";
 formalizeButton.style.width = '100%';
 formalizeButton.style.padding = '10px';
-formalizeButton.style.backgroundColor = '#2196F3';
+formalizeButton.style.backgroundColor = "";
 formalizeButton.style.color = 'white';
 formalizeButton.style.border = '1px solid #ccc';
 formalizeButton.style.borderColor = "rgb(33, 192, 99)";
@@ -153,30 +151,18 @@ formalizeButton.style.borderRadius = '25px';
 formalizeButton.style.cursor = 'pointer';
 formalizeButton.style.marginBottom = '10px';
 
-
-formalizeButton.addEventListener("mouseenter", () => {
-    formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
-    formalizeButton.style.color = "black";
-});
-formalizeButton.addEventListener("mouseleave", () => {
-    formalizeButton.style.backgroundColor = "";
-    formalizeButton.style.color = "white";
-});
-
-// Cria a área de resultado
+//area de resultado
 const resultArea = document.createElement('div');
 resultArea.style.marginTop = '10px';
 resultArea.style.marginRight = '10px';
 resultArea.style.width = '100%';
 resultArea.style.padding = '0px';
-resultArea.style.border = '1px solid #eee';
-resultArea.style.backgroundColor = '#f9f9f9';
-resultArea.style.borderRadius = '4px';
+resultArea.style.backgroundColor = 'rgb(82, 82, 82);';
 resultArea.style.minHeight = '50px';
 resultArea.style.maxHeight = '200px';
 resultArea.style.overflowY = 'auto';
 resultArea.style.whiteSpace = 'pre-wrap'; // Mantém quebras de linha
-resultArea.style.color = '#000'; // Texto preto
+resultArea.style.color = 'white'; 
 resultArea.style.opacity = '1'; // Totalmente visível
 resultArea.style.userSelect = 'text'; // Permite selecionar o texto
 resultArea.style.pointerEvents = 'auto'; // Permite interação
@@ -185,33 +171,135 @@ resultArea.innerText = 'Texto formalizado aparecerá aqui.';
 // Botão para enviar para o WhatsApp
 const sendToWhatsAppButton = document.createElement('button');
 sendToWhatsAppButton.id = 'sendToWhatsAppButton';
-sendToWhatsAppButton.innerText = "";
+sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
 sendToWhatsAppButton.style.width = '100%';
-sendToWhatsAppButton.style.padding = '0px';
-sendToWhatsAppButton.style.backgroundColor = '#2196F3';
+sendToWhatsAppButton.style.padding = '10px';
 sendToWhatsAppButton.style.color = 'white';
 sendToWhatsAppButton.style.border = '1px solid #ccc';
 sendToWhatsAppButton.style.borderColor = "rgb(33, 192, 99)";
 sendToWhatsAppButton.style.borderRadius = '25px';
 sendToWhatsAppButton.style.cursor = 'pointer';
 sendToWhatsAppButton.style.marginBottom = '10px';
-sendToWhatsAppButton.disabled = true; // Começa desabilitado
-//sendToWhatsAppButton.style.visibility = 'hidden'; // Começa invisível
+//sendToWhatsAppButton.disabled = true; 
 
+window.addEventListener("load", () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    console.log(bgColor);
+        // Função para verificar se a cor é escura
+        function isDark(color) {
+            const rgb = bgColor.match(/\d+/g).map(Number);
+            const luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+            return luminance < 128; // valor de corte, pode ajustar conforme necessário
+        }
 
-sendToWhatsAppButton.addEventListener("mouseenter", () => {
-    sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
+        if (isDark(bgColor)) { 
+    // Se a tag dark estiver presente, aplique o estilo escuro
+    console.log("Tema escuro ativado");
+
+    toggleButton.style.fontWeight = "bold";
+    toggleButton.style.fontSize = "12px";
+    toggleButton.style.color = "white";
+    toggleButton.style.position = "fixed";
+    toggleButton.style.bottom = "70px";
+    toggleButton.style.right = "20px";
+    toggleButton.style.zIndex = "9999";
+    toggleButton.style.padding = "10px 20px";
+    toggleButton.style.border = "none";
+    toggleButton.style.borderRadius = "100px";
+    toggleButton.style.cursor = "pointer";
+    toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+    toggleButton.style.color = "white";
+    toggleButton.style.backgroundColor = "#242626";
+    panel.style.backgroundColor = "rgb(36, 38, 38)"; 
+
+    // hover
+    toggleButton.addEventListener("mouseenter", () => {
+        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
+        toggleButton.style.color = "black";
+    });
+    toggleButton.addEventListener("mouseleave", () => {
+        toggleButton.style.backgroundColor = "#242626";
+        toggleButton.style.color = "white";
+    });
+    
+    formalizeButton.addEventListener("mouseenter", () => {
+        formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
+        formalizeButton.style.color = "black";
+    });
+    formalizeButton.addEventListener("mouseleave", () => {
+        formalizeButton.style.backgroundColor = "";
+        formalizeButton.style.color = "white";
+    });
+
+    sendToWhatsAppButton.addEventListener("mouseenter", () => {
+        sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
+        sendToWhatsAppButton.style.color = "black";
+    });
+    sendToWhatsAppButton.addEventListener("mouseleave", () => {
+        sendToWhatsAppButton.style.backgroundColor = "";
+        sendToWhatsAppButton.style.color = "white";
+    });
+
+} else {
+    // Se a tag dark não estiver presente, aplique o estilo claro
+    console.log("Tema claro ativado");
+
+    toggleButton.style.fontWeight = "bold";
+    toggleButton.style.fontSize = "12px";
+    toggleButton.style.color = "white";
+    toggleButton.style.position = "fixed";
+    toggleButton.style.bottom = "70px";
+    toggleButton.style.right = "20px";
+    toggleButton.style.zIndex = "9999";
+    toggleButton.style.padding = "10px 20px";
+    toggleButton.style.border = "none";
+    toggleButton.style.borderRadius = "100px";
+    toggleButton.style.cursor = "pointer";
+    toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+    toggleButton.style.color = "rgb(94, 94, 94)";
+    toggleButton.style.backgroundColor = "rgb(255, 255, 255)";
+    panel.style.backgroundColor = "rgb(255, 255, 255)"; 
+    sendToWhatsAppButton.style.backgroundColor = "rgb(255, 255, 255)";
     sendToWhatsAppButton.style.color = "black";
-});
-sendToWhatsAppButton.addEventListener("mouseleave", () => {
-    sendToWhatsAppButton.style.backgroundColor = "";
-    sendToWhatsAppButton.style.color = "white";
-});
+    formalizeButton.style.backgroundColor = "rgb(255, 255, 255)";
+    formalizeButton.style.color = "black";
+    textarea.style.backgroundColor = "rgb(255, 255, 255)";
+    textarea.style.color = "black";
+    resultArea.style.color = "black";
+
+    // hover
+    toggleButton.addEventListener("mouseenter", () => {
+        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
+        toggleButton.style.color = "white";
+    });
+    toggleButton.addEventListener("mouseleave", () => {
+        toggleButton.style.backgroundColor = "rgb(255, 255, 255)";
+        toggleButton.style.color = "rgb(94, 94, 94)";
+    });
+
+    formalizeButton.addEventListener("mouseenter", () => {
+        formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
+        formalizeButton.style.color = "white";
+    });
+    formalizeButton.addEventListener("mouseleave", () => {
+        formalizeButton.style.backgroundColor = "white";
+        formalizeButton.style.color = "black";
+    });
+
+    sendToWhatsAppButton.addEventListener("mouseenter", () => {
+        sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
+        sendToWhatsAppButton.style.color = "white";
+    });
+    sendToWhatsAppButton.addEventListener("mouseleave", () => {
+        sendToWhatsAppButton.style.backgroundColor = "white";
+        sendToWhatsAppButton.style.color = "black";
+    });
+
+}});
 
 
 // Toggle mostrar/esconder painel
 toggleButton.onclick = () => {
-
 
     const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input');
     
@@ -220,14 +308,9 @@ toggleButton.onclick = () => {
         const selection = window.getSelection();
         if (panel.style.display === 'none') {
             // Verifica se há texto selecionado
-       
             if (selection && selection.toString().trim()) {
             textarea.value = selection.toString().trim();
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            
-            // Adiciona o evento de clique no botão de formalizar
-            //formalizeButton.click();
-
             }  else {
             alertPesonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
             }
@@ -237,10 +320,7 @@ toggleButton.onclick = () => {
             panel.style.display = 'none'
             resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
             textarea.value = ''; // Limpa o textarea
-            sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
-            sendToWhatsAppButton.style.padding ='0px'  ; // remove o padding
-            sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
-            sendToWhatsAppButton.style.backgroundColor = '#2196F3'; // Cor cinza para indicar que está desabilitado
+            //sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
             
         }
     } else {
@@ -252,7 +332,7 @@ toggleButton.onclick = () => {
                 //alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
                 alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
             }
-        // Se o painel já estiver visível, apenas o esconde
+        
     } 
 };
 
@@ -267,15 +347,11 @@ formalizeButton.onclick = async () => {
     resultArea.innerText = "Formalizando, aguarde...";
     // Desabilita o botão enquanto processa
     formalizeButton.disabled = true;
-    sendToWhatsAppButton.style.backgroundColor = '#2196F3'; // Cor cinza para indicar que está desabilitado 
-    sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
-    sendToWhatsAppButton.style.padding = '10px';
     //formalizeButton.innerText = "Formalizando...";
     try {
         const formalizedText = await sendToOpenAI(inputText);
         resultArea.innerText = formalizedText;
         sendToWhatsAppButton.disabled = false; // Habilita o botão do WhatsApp
-        //sendToWhatsAppButton.style.visibility = 'visible'; // Torna visível
     } catch (error) {
         console.error("Erro ao formalizar:", error);
         resultArea.innerText = "Erro ao formalizar o texto.";
@@ -301,23 +377,19 @@ document.body.appendChild(panel);
 
 sendToWhatsAppButton.onclick = () => {
     const outputText = resultArea.innerText.trim();
-    if (!outputText) {
-        alertPesonalizado("Nenhum texto formalizado encontrado.");
+    if (outputText === "Texto formalizado aparecerá aqui.") {
+        alertPesonalizado("Por favor, formalize o texto antes de enviar.");
         return;
     }
 
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],input.w-full.rounded-full.bg-gray-100');
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],input.w-full.rounded-full.bg-gray-100,textarea');
 
     if (chatInput) {
         chatInput.focus();
-
-        // Seta o valor no campo de input
         chatInput.value = outputText;
-
         // Dispara o evento de input para que o sistema reconheça
         chatInput.dispatchEvent(new Event('input', { bubbles: true }));
-
-        // Se quiser simular o paste (opcional, pode ajudar em alguns casos)
+        // Simula o evento de colar
         const dataTransfer = new DataTransfer();
         dataTransfer.setData('text/plain', outputText);
         const pasteEvent = new ClipboardEvent('paste', {
@@ -325,20 +397,14 @@ sendToWhatsAppButton.onclick = () => {
             bubbles: true
         });
         chatInput.dispatchEvent(pasteEvent);
-        resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
-        textarea.value = ''; // Limpa o textarea
-        sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
-        sendToWhatsAppButton.style.padding ='0px'  ; // remove o padding
-        sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
-        panel.style.display = 'none'; // Esconde o botão após o envio
+        resultArea.innerText = 'Texto formalizado aparecerá aqui.';
+        textarea.value = '';
+        //sendToWhatsAppButton.disabled = true;
+        panel.style.display = 'none';
     } else {
         alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
     }
 };
-
-
-
-// Adiciona o botão de enviar para WhatsApp ao painel
 
 // Função que chama a OpenAI
 async function sendToOpenAI(text) {
