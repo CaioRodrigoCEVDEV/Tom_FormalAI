@@ -3,7 +3,7 @@
     "name": "Tom Formal - WhatsApp",
     "short_name": "Tom FormalAI",
     "version": "1.2",
-    "description": "Um bot de WhatsApp que responde mensagens automaticamente com inteligência artificial.",
+    "description": "Um bot de WhatsApp que formaliza mensagens automaticamente com inteligência artificial.",
     "permissions": ["storage"],
     
     "action": {
