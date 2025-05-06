@@ -30,14 +30,15 @@ if (!hasDarkTag) {
     toggleButton.style.cursor = "pointer";
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
     toggleButton.style.color = "white";
+    toggleButton.style.backgroundColor = "#242626";
 
     // hover
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-        toggleButton.style.color = "white";
+        toggleButton.style.color = "black";
     });
     toggleButton.addEventListener("mouseleave", () => {
-        toggleButton.style.backgroundColor = "";
+        toggleButton.style.backgroundColor = "#242626";
         toggleButton.style.color = "white";
     });
 } else {
@@ -56,11 +57,12 @@ if (!hasDarkTag) {
     toggleButton.style.borderRadius = "100px";
     toggleButton.style.cursor = "pointer";
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
+    toggleButton.style.color = "black";
 
     // hover
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-        toggleButton.style.color = "black";
+        toggleButton.style.color = "white";
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "";
@@ -104,7 +106,7 @@ panel.style.position = 'fixed';
 panel.style.bottom = '120px'; // um pouco acima do botão
 panel.style.right = '20px';
 panel.style.width = '300px';
-panel.style.backgroundColor = ""; // Cor verde do WhatsApp
+panel.style.backgroundColor = "rgb(36, 38, 38)"; 
 panel.style.border = '1px solid #ccc';
 panel.style.borderColor = "rgb(33, 192, 99)";
 panel.style.borderRadius = '25px';
@@ -122,10 +124,13 @@ textarea.style.width = '100%';
 textarea.style.height = '100px';
 textarea.style.marginBottom = '10px';
 textarea.style.padding = '0px';
-textarea.style.borderRadius = '4px';
-textarea.style.border = '1px solid #ccc';
-textarea.style.resize = 'none';
-textarea.style.backgroundColor = '#f9f9f9';
+textarea.style.borderRadius = '5px';
+textarea.style.color = 'white';
+textarea.style.backgroundColor = "rgb(36, 38, 38)"; 
+//textarea.style.border = '1px solid #ccc';
+//textarea.style.resize = 'none';
+//textarea.style.backgroundColor = 'rgb(82, 82, 82);';
+textarea.style.border = 'none';
 
 // Cria o botão de formalizar
 
@@ -133,7 +138,7 @@ const formalizeButton = document.createElement('button');
 formalizeButton.innerText = "Formalizar";
 formalizeButton.style.width = '100%';
 formalizeButton.style.padding = '10px';
-formalizeButton.style.backgroundColor = '#2196F3';
+formalizeButton.style.backgroundColor = "";
 formalizeButton.style.color = 'white';
 formalizeButton.style.border = '1px solid #ccc';
 formalizeButton.style.borderColor = "rgb(33, 192, 99)";
@@ -157,14 +162,14 @@ resultArea.style.marginTop = '10px';
 resultArea.style.marginRight = '10px';
 resultArea.style.width = '100%';
 resultArea.style.padding = '0px';
-resultArea.style.border = '1px solid #eee';
-resultArea.style.backgroundColor = '#f9f9f9';
-resultArea.style.borderRadius = '4px';
+//resultArea.style.border = '1px solid #eee';
+resultArea.style.backgroundColor = 'rgb(82, 82, 82);';
+//resultArea.style.borderRadius = '4px';
 resultArea.style.minHeight = '50px';
 resultArea.style.maxHeight = '200px';
 resultArea.style.overflowY = 'auto';
 resultArea.style.whiteSpace = 'pre-wrap'; // Mantém quebras de linha
-resultArea.style.color = '#000'; // Texto preto
+resultArea.style.color = 'white'; 
 resultArea.style.opacity = '1'; // Totalmente visível
 resultArea.style.userSelect = 'text'; // Permite selecionar o texto
 resultArea.style.pointerEvents = 'auto'; // Permite interação
@@ -173,10 +178,10 @@ resultArea.innerText = 'Texto formalizado aparecerá aqui.';
 // Botão para enviar para o WhatsApp
 const sendToWhatsAppButton = document.createElement('button');
 sendToWhatsAppButton.id = 'sendToWhatsAppButton';
-sendToWhatsAppButton.innerText = "";
+sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
 sendToWhatsAppButton.style.width = '100%';
-sendToWhatsAppButton.style.padding = '0px';
-sendToWhatsAppButton.style.backgroundColor = '#2196F3';
+sendToWhatsAppButton.style.padding = '10px';
+//sendToWhatsAppButton.style.backgroundColor = '#2196F3';
 sendToWhatsAppButton.style.color = 'white';
 sendToWhatsAppButton.style.border = '1px solid #ccc';
 sendToWhatsAppButton.style.borderColor = "rgb(33, 192, 99)";
@@ -226,9 +231,6 @@ toggleButton.onclick = () => {
             resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
             textarea.value = ''; // Limpa o textarea
             sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
-            sendToWhatsAppButton.style.padding ='0px'  ; // remove o padding
-            sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
-            sendToWhatsAppButton.style.backgroundColor = '#2196F3'; // Cor cinza para indicar que está desabilitado
             
         }
     } else {
@@ -255,9 +257,6 @@ formalizeButton.onclick = async () => {
     resultArea.innerText = "Formalizando, aguarde...";
     // Desabilita o botão enquanto processa
     formalizeButton.disabled = true;
-    sendToWhatsAppButton.style.backgroundColor = '#2196F3'; // Cor cinza para indicar que está desabilitado 
-    sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
-    sendToWhatsAppButton.style.padding = '10px';
     //formalizeButton.innerText = "Formalizando...";
     try {
         const formalizedText = await sendToOpenAI(inputText);
@@ -316,8 +315,6 @@ sendToWhatsAppButton.onclick = () => {
         resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
         textarea.value = ''; // Limpa o textarea
         sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
-        sendToWhatsAppButton.style.padding ='0px'  ; // remove o padding
-        sendToWhatsAppButton.innerText = ""; // Limpa o texto do botão
         panel.style.display = 'none'; // Esconde o botão após o envio
     } else {
         alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
