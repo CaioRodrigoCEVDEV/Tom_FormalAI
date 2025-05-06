@@ -254,7 +254,7 @@ toggleButton.onclick = () => {
                 alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
             }
         
-    } 
+    }
 };
 
 // Botão formalizar texto
