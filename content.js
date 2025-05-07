@@ -19,33 +19,6 @@ const panel = document.createElement('div');
     panel.style.fontFamily = 'Arial, sans-serif';
     panel.style.display = 'none';
 
-//toggleButton.style.backgroundColor = "rgb(33 192 99)"; // Cor verde do WhatsApp
-
-/* FAZER FUNFAR MAIS TARDE, DETECTAR INPUT DO WHATSAPP
-
-document.body.appendChild(toggleButton);
-
-const esperarCampo = setInterval(() => {
-  const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"]');
-
-  if (chatInput) {
-    clearInterval(esperarCampo); // Para o loop
-
-    chatInput.addEventListener('input', function () {
-      const texto = chatInput.innerText;
-      if (texto && texto.trim().length > 0) {
-        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-        toggleButton.style.color = "black";
-      } else {
-            toggleButton.style.backgroundColor = "";
-            toggleButton.style.color = "white";}
-    });
-  }
-}, 1000); // Tenta a cada 1 segundo
- */
-
-//toggleButton.style.color = "white";
-
 //textarea para digitar
 const textarea = document.createElement('textarea');
 textarea.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
@@ -218,7 +191,6 @@ window.addEventListener("load", () => {
 
 }});
 
-
 // Toggle mostrar/esconder painel
 toggleButton.onclick = () => {
 
@@ -232,6 +204,7 @@ toggleButton.onclick = () => {
             if (selection && selection.toString().trim()) {
             textarea.value = selection.toString().trim();
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            formalizeButton.click();
             }  else {
             alertPesonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
             }
