@@ -1,4 +1,7 @@
 
+// ==UserScript==
+
+
 const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
@@ -206,7 +209,7 @@ toggleButton.onclick = () => {
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
             formalizeButton.click();
             }  else {
-            alertPesonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
+            alertPersonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
             }
         } 
         else {
@@ -224,7 +227,7 @@ toggleButton.onclick = () => {
                 }
             else {
                 //alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
-                alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+                alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
             }
         
     }
@@ -234,7 +237,7 @@ toggleButton.onclick = () => {
 formalizeButton.onclick = async () => {
     const inputText = textarea.value.trim();
     if (!inputText) {
-        alertPesonalizado("Por favor, digite um texto.");
+        alertPersonalizado("Por favor, digite um texto.");
         return;
     }
 
@@ -255,9 +258,6 @@ formalizeButton.onclick = async () => {
     }
 };
 
-
-
-
 // Adiciona elementos no painel
 panel.appendChild(textarea);
 panel.appendChild(formalizeButton);
@@ -273,7 +273,7 @@ document.body.appendChild(panel);
 sendToWhatsAppButton.onclick = () => {
     const outputText = resultArea.innerText.trim();
     if (outputText === "Texto formalizado aparecerá aqui.") {
-        alertPesonalizado("Por favor, formalize o texto antes de enviar.");
+        alertPersonalizado("Por favor, formalize o texto antes de enviar.");
         return;
     }
 
@@ -297,7 +297,7 @@ sendToWhatsAppButton.onclick = () => {
         //sendToWhatsAppButton.disabled = true;
         panel.style.display = 'none';
     } else {
-        alertPesonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+        alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
     }
 };
 
@@ -329,13 +329,14 @@ async function sendToOpenAI(text) {
     const data = await response.json();
     return data.choices[0].message.content.trim();
 };
-// alertPesonalizado personalizado
-function alertPesonalizado(message) {
-    let alertPesonalizado = document.getElementById("alertPesonalizado");
-    if (!alertPesonalizado) {
-        alertPesonalizado = document.createElement("div");
-        alertPesonalizado.id = "alertPesonalizado";
-        alertPesonalizado.style = `
+// alertPersonalizado personalizado
+
+function alertPersonalizado(message) {
+    let alertPersonalizado = document.getElementById("alertPersonalizado");
+    if (!alertPersonalizado) {
+        alertPersonalizado = document.createElement("div");
+        alertPersonalizado.id = "alertPersonalizado";
+        alertPersonalizado.style = `
         position: fixed;
         bottom: 30px;
         left: 50%;
@@ -349,14 +350,14 @@ function alertPesonalizado(message) {
         opacity: 0;
         transition: opacity 0.3s;
       `;
-      document.body.appendChild(alertPesonalizado);
+      document.body.appendChild(alertPersonalizado);
     }
   
-    alertPesonalizado.textContent = message;
-    alertPesonalizado.style.opacity = "1";
+    alertPersonalizado.textContent = message;
+    alertPersonalizado.style.opacity = "1";
   
     setTimeout(() => {
-        alertPesonalizado.style.opacity = "0";
-        alertPesonalizado.remove(); 
+        alertPersonalizado.style.opacity = "0";
+        alertPersonalizado.remove(); 
     }, 4000);
   };
