@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Tom Formal - WhatsApp",
     "short_name": "Tom FormalAI",
-    "version": "1.3",
+    "version": "1.4.0",
     "description": "Um bot de WhatsApp que formaliza mensagens automaticamente com inteligência artificial.",
     "permissions": ["storage"],
     
@@ -24,7 +24,13 @@
       "https://i3chat.com.br/*" 
           ],
     "type": "module",
-    "js": ["/js/content.js"]
+    "js": ["/js/content.js"],
+    "web_accessible_resources": [
+      {
+        "resources": ["js/theme.js"],
+        "matches": ["<all_urls>"]
+      }
+    ]
   }
  ]
 

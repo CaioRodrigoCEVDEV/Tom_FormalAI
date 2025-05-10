@@ -1,7 +1,6 @@
 
 // ==UserScript==
 
-
 const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
@@ -208,6 +207,8 @@ toggleButton.onclick = () => {
             textarea.value = selection.toString().trim();
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
             formalizeButton.click();
+            toggleButton.disabled = true;
+            
             }  else {
             alertPersonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
             }
@@ -235,23 +236,39 @@ toggleButton.onclick = () => {
 
 // Botão formalizar texto
 formalizeButton.onclick = async () => {
+    formalizeButton.innerText = "Formalizando, aguarde...";
+    resultArea.innerText = "";
+    toggleButton.disabled = true;
+    formalizeButton.disabled = true;
+    sendToWhatsAppButton.disabled = true;
+    // Aguarda 1.5 segundos para evitar chamadas excessivas
+    await new Promise(resolve => setTimeout(resolve, 1500)); 
     const inputText = textarea.value.trim();
     if (!inputText) {
         alertPersonalizado("Por favor, digite um texto.");
         return;
     }
 
-    resultArea.innerText = "Formalizando, aguarde...";
+    //resultArea.innerText = "Formalizando, aguarde...";
+    formalizeButton.innerText = "Formalizando, aguarde...";
+    
     // Desabilita o botão enquanto processa
     formalizeButton.disabled = true;
+    sendToWhatsAppButton.disabled = true; 
+    
     //formalizeButton.innerText = "Formalizando...";
     try {
         const formalizedText = await sendToOpenAI('"' + inputText + '"');
         // Remove as aspas do início e do fim do texto formalizado
         resultArea.innerText = formalizedText.replace(/^"|"$/g, '');
+        formalizeButton.innerText = "Formalizar";
+        toggleButton.disabled = false;
+        formalizeButton.disabled = false;
+        sendToWhatsAppButton.disabled = false; 
     } catch (error) {
         console.error("Erro ao formalizar:", error);
         resultArea.innerText = "Erro ao formalizar o texto.";
+        formalizeButton.innerText = "Formalizar";
     } finally {
         formalizeButton.disabled = false;
         formalizeButton.innerText = "Formalizar";
