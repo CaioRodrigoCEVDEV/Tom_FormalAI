@@ -121,7 +121,9 @@ window.addEventListener("load", () => {
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
         toggleButton.style.color = "black";
-        alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.");
+        if (panel.style.display === 'none') {
+            alertPersonalizado("Clique ou Pressione Ctrl + Q para enviar o texto para o WhatsApp.");
+        }
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "#242626";
@@ -131,10 +133,12 @@ window.addEventListener("load", () => {
     formalizeButton.addEventListener("mouseenter", () => {
         formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
         formalizeButton.style.color = "black";
+        formalizeButton.innerText = "Formalizar (Ctrl + Y)";
     });
     formalizeButton.addEventListener("mouseleave", () => {
         formalizeButton.style.backgroundColor = "";
         formalizeButton.style.color = "white";
+        formalizeButton.innerText = "Formalizar";
     });
 
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
@@ -179,7 +183,9 @@ window.addEventListener("load", () => {
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
         toggleButton.style.color = "white";
-        alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.");
+        if (panel.style.display === 'none') {
+            alertPersonalizado("Clique ou Pressione Ctrl + Q para enviar o texto para o WhatsApp.");
+        }
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "rgb(255, 255, 255)";
@@ -189,10 +195,12 @@ window.addEventListener("load", () => {
     formalizeButton.addEventListener("mouseenter", () => {
         formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
         formalizeButton.style.color = "white";
+        formalizeButton.innerText = "Formalizar (Ctrl + Y)";
     });
     formalizeButton.addEventListener("mouseleave", () => {
         formalizeButton.style.backgroundColor = "white";
         formalizeButton.style.color = "black";
+        formalizeButton.innerText = "Formalizar";
     });
 
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
@@ -395,7 +403,7 @@ function alertPersonalizado(message) {
   };
 
   
-// Adiciona o evento de clique ao botão de toggle com atalho Ctrl + Q
+// Adiciona as teclas de atalho
   const ctrla = new Set();
   document.addEventListener('keydown', (event) => {
   ctrla.add(event.key);
@@ -418,4 +426,16 @@ function alertPersonalizado(message) {
   });
       document.addEventListener('keyup', (event) => {
       ctrlq.delete(event.key);
+  }); 
+
+  const ctrly = new Set();
+  document.addEventListener('keydown', (event) => {
+  ctrly.add(event.key);
+  if (panel.style.display === 'block' && ctrly.has('Control') && ctrly.has('y')) {
+      event.preventDefault(); // evita o comportamento padrão (salvar página)
+      formalizeButton.click(); 
+  }
+  });
+      document.addEventListener('keyup', (event) => {
+      ctrly.delete(event.key);
   }); 
