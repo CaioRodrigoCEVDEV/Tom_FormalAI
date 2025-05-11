@@ -1,5 +1,14 @@
 
+
+
+
+
+
 // ==UserScript==
+
+
+// ==UserScript==
+
 
 const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
@@ -112,6 +121,7 @@ window.addEventListener("load", () => {
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
         toggleButton.style.color = "black";
+        alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.");
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "#242626";
@@ -167,6 +177,7 @@ window.addEventListener("load", () => {
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
         toggleButton.style.color = "white";
+        alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.");
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "rgb(255, 255, 255)";
@@ -378,3 +389,29 @@ function alertPersonalizado(message) {
         alertPersonalizado.remove(); 
     }, 4000);
   };
+
+  
+// Adiciona o evento de clique ao botão de toggle com atalho Ctrl + Q
+  const ctrla = new Set();
+  document.addEventListener('keydown', (event) => {
+  ctrla.add(event.key);
+  if (panel.style.display === 'none' && ctrla.has('Control') && ctrla.has('q')) {
+      event.preventDefault(); // evita o comportamento padrão (salvar página)
+      toggleButton.click(); 
+  }
+  });
+      document.addEventListener('keyup', (event) => {
+      ctrla.delete(event.key);
+  }); 
+
+  const ctrlq = new Set();
+  document.addEventListener('keydown', (event) => {
+  ctrlq.add(event.key);
+  if (panel.style.display === 'block' && ctrlq.has('Control') && ctrlq.has('q')) {
+      event.preventDefault(); // evita o comportamento padrão (salvar página)
+      sendToWhatsAppButton.click(); 
+  }
+  });
+      document.addEventListener('keyup', (event) => {
+      ctrlq.delete(event.key);
+  }); 
