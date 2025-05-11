@@ -140,10 +140,12 @@ window.addEventListener("load", () => {
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
         sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
         sendToWhatsAppButton.style.color = "black";
+        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
     });
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
         sendToWhatsAppButton.style.backgroundColor = "";
         sendToWhatsAppButton.style.color = "white";
+        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
     });
 
 } else {
@@ -196,10 +198,12 @@ window.addEventListener("load", () => {
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
         sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
         sendToWhatsAppButton.style.color = "white";
+        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
     });
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
         sendToWhatsAppButton.style.backgroundColor = "white";
         sendToWhatsAppButton.style.color = "black";
+        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
     });
 
 }});
