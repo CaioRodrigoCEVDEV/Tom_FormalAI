@@ -1,15 +1,4 @@
 
-
-
-
-
-
-// ==UserScript==
-
-
-// ==UserScript==
-
-
 const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
@@ -219,7 +208,7 @@ window.addEventListener("load", () => {
 // Toggle mostrar/esconder painel
 toggleButton.onclick = () => {
 
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input');
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input.w-full.rounded-full.bg-gray-100,textarea');
     
     if (chatInput) {
         // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp somente o que está selecionado
@@ -265,7 +254,7 @@ formalizeButton.onclick = async () => {
     formalizeButton.disabled = true;
     sendToWhatsAppButton.disabled = true;
     // Aguarda 1.5 segundos para evitar chamadas excessivas
-    await new Promise(resolve => setTimeout(resolve, 1500)); 
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
     const inputText = textarea.value.trim();
     if (!inputText) {
         alertPersonalizado("Por favor, digite um texto.");
@@ -317,7 +306,7 @@ sendToWhatsAppButton.onclick = () => {
         return;
     }
 
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],input.w-full.rounded-full.bg-gray-100,textarea');
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],[placeholder="Digite uma mensagem"],textarea');
 
     if (chatInput) {
         chatInput.focus();
