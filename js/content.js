@@ -9,7 +9,7 @@ const panel = document.createElement('div');
     panel.style.bottom = '120px';
     panel.style.right = '20px';
     panel.style.width = '300px';
-    panel.style.backgroundColor = "rgb(36, 38, 38)"; 
+    panel.style.backgroundColor = "rgba(36, 38, 38, 0.8)"; 
     panel.style.border = '1px solid #ccc';
     panel.style.borderColor = "rgb(33, 192, 99)";
     panel.style.borderRadius = '25px';
@@ -21,6 +21,7 @@ const panel = document.createElement('div');
 
 //textarea para digitar
 const textarea = document.createElement('textarea');
+textarea.style.fontFamily = 'Arial, sans-serif';
 textarea.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
 textarea.placeholder = 'Digite seu texto aqui...';
 textarea.style.width = '100%';
@@ -29,7 +30,7 @@ textarea.style.marginBottom = '10px';
 textarea.style.padding = '0px';
 textarea.style.borderRadius = '5px';
 textarea.style.color = 'white';
-textarea.style.backgroundColor = "rgb(36, 38, 38)"; 
+textarea.style.backgroundColor = "rgba(36, 38, 38, 0.0)"; 
 textarea.style.border = 'none';
 
 //botão de formalizar
@@ -103,9 +104,11 @@ window.addEventListener("load", () => {
     toggleButton.style.cursor = "pointer";
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
     toggleButton.style.color = "white";
-    toggleButton.style.backgroundColor = "#242626";
-    panel.style.backgroundColor = "rgb(36, 38, 38)"; 
-
+    //toggleButton.style.backgroundColor = "#242626";
+    toggleButton.style.backgroundColor = "rgba(36, 38, 38, 0.77)"; 
+    panel.style.backgroundColor = "rgba(36, 38, 38, 0.77)"; 
+    panel.style.backdropFilter = 'blur(18px)';
+    textarea.style.backgroundColor = "rgba(36, 38, 38, 0.0)"; 
     // hover
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
@@ -115,7 +118,7 @@ window.addEventListener("load", () => {
         }
     });
     toggleButton.addEventListener("mouseleave", () => {
-        toggleButton.style.backgroundColor = "#242626";
+        toggleButton.style.backgroundColor = "rgba(36, 38, 38, 0.77)";
         toggleButton.style.color = "white";
     });
     
@@ -158,13 +161,12 @@ window.addEventListener("load", () => {
     toggleButton.style.cursor = "pointer";
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
     toggleButton.style.color = "rgb(94, 94, 94)";
-    toggleButton.style.backgroundColor = "rgb(255, 255, 255)";
-    panel.style.backgroundColor = "rgb(255, 255, 255)"; 
-    sendToWhatsAppButton.style.backgroundColor = "rgb(255, 255, 255)";
+    toggleButton.style.backgroundColor = "rgba(255, 255, 255, 0.77)"; 
+    panel.style.backgroundColor = "rgba(255, 255, 255, 0.77)"; 
+    panel.style.backdropFilter = 'blur(18px)';
     sendToWhatsAppButton.style.color = "black";
-    formalizeButton.style.backgroundColor = "rgb(255, 255, 255)";
     formalizeButton.style.color = "black";
-    textarea.style.backgroundColor = "rgb(255, 255, 255)";
+    textarea.style.backgroundColor = "rgba(255, 255, 255,0.0)";
     textarea.style.color = "black";
     resultArea.style.color = "black";
 
@@ -177,8 +179,8 @@ window.addEventListener("load", () => {
         }
     });
     toggleButton.addEventListener("mouseleave", () => {
-        toggleButton.style.backgroundColor = "rgb(255, 255, 255)";
-        toggleButton.style.color = "rgb(94, 94, 94)";
+        toggleButton.style.backgroundColor = "rgba(255, 255, 255,0.77)";
+        toggleButton.style.color = "rgb(29, 29, 29)";
     });
 
     formalizeButton.addEventListener("mouseenter", () => {
@@ -187,7 +189,7 @@ window.addEventListener("load", () => {
         formalizeButton.innerText = "Formalizar (Ctrl + Y)";
     });
     formalizeButton.addEventListener("mouseleave", () => {
-        formalizeButton.style.backgroundColor = "white";
+        formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.0)";
         formalizeButton.style.color = "black";
         formalizeButton.innerText = "Formalizar";
     });
@@ -198,7 +200,7 @@ window.addEventListener("load", () => {
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
     });
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
-        sendToWhatsAppButton.style.backgroundColor = "white";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.0)";
         sendToWhatsAppButton.style.color = "black";
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
     });
@@ -306,7 +308,7 @@ sendToWhatsAppButton.onclick = () => {
         return;
     }
 
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],[placeholder="Digite uma mensagem"],textarea');
+    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],[placeholder="Digite uma mensagem"]');
 
     if (chatInput) {
         chatInput.focus();
