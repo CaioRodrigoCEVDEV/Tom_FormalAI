@@ -11,9 +11,9 @@ const panel = document.createElement('div');
     panel.style.width = '300px';
     panel.style.backgroundColor = "rgba(36, 38, 38, 0.8)"; 
     panel.style.border = '1px solid #ccc';
-    panel.style.borderColor = "rgb(33, 192, 99)";
+    panel.style.borderColor = "rgba(33, 192, 99,0.0)";
     panel.style.borderRadius = '25px';
-    panel.style.boxShadow = '0px 4px 8px rgba(0,0,0,0.2)';
+    panel.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0)';
     panel.style.padding = '15px';
     panel.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
     panel.style.fontFamily = 'Arial, sans-serif';
@@ -38,10 +38,10 @@ const formalizeButton = document.createElement('button');
 formalizeButton.innerText = "Formalizar";
 formalizeButton.style.width = '100%';
 formalizeButton.style.padding = '10px';
-formalizeButton.style.backgroundColor = "";
+formalizeButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)"; 
 formalizeButton.style.color = 'white';
 formalizeButton.style.border = '1px solid #ccc';
-formalizeButton.style.borderColor = "rgb(33, 192, 99)";
+formalizeButton.style.borderColor = "rgba(33, 192, 99,0.0)";
 formalizeButton.style.borderRadius = '25px';
 formalizeButton.style.cursor = 'pointer';
 formalizeButton.style.marginBottom = '10px';
@@ -71,7 +71,7 @@ sendToWhatsAppButton.style.width = '100%';
 sendToWhatsAppButton.style.padding = '10px';
 sendToWhatsAppButton.style.color = 'white';
 sendToWhatsAppButton.style.border = '1px solid #ccc';
-sendToWhatsAppButton.style.borderColor = "rgb(33, 192, 99)";
+sendToWhatsAppButton.style.borderColor = "rgba(33, 192, 99,0.0)";
 sendToWhatsAppButton.style.borderRadius = '25px';
 sendToWhatsAppButton.style.cursor = 'pointer';
 sendToWhatsAppButton.style.marginBottom = '10px';
@@ -109,6 +109,7 @@ window.addEventListener("load", () => {
     panel.style.backgroundColor = "rgba(36, 38, 38, 0.77)"; 
     panel.style.backdropFilter = 'blur(18px)';
     textarea.style.backgroundColor = "rgba(36, 38, 38, 0.0)"; 
+    sendToWhatsAppButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)";
     // hover
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
@@ -123,23 +124,24 @@ window.addEventListener("load", () => {
     });
     
     formalizeButton.addEventListener("mouseenter", () => {
-        formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
-        formalizeButton.style.color = "black";
+        //formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
+        formalizeButton.style.backgroundColor = "rgba(33, 192, 99,0.3)";
+        formalizeButton.style.color = "white";
         formalizeButton.innerText = "Formalizar (Ctrl + Y)";
     });
     formalizeButton.addEventListener("mouseleave", () => {
-        formalizeButton.style.backgroundColor = "";
+        formalizeButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)"; 
         formalizeButton.style.color = "white";
         formalizeButton.innerText = "Formalizar";
     });
 
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
-        sendToWhatsAppButton.style.color = "black";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(33, 192, 99,0.3)";
+        sendToWhatsAppButton.style.color = "white";
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
     });
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
-        sendToWhatsAppButton.style.backgroundColor = "";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)"; 
         sendToWhatsAppButton.style.color = "white";
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
     });
@@ -162,10 +164,15 @@ window.addEventListener("load", () => {
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
     toggleButton.style.color = "rgb(94, 94, 94)";
     toggleButton.style.backgroundColor = "rgba(255, 255, 255, 0.77)"; 
-    panel.style.backgroundColor = "rgba(255, 255, 255, 0.77)"; 
+    panel.style.backgroundColor = "rgba(255, 255, 255, 0.33)"; 
+    panel.style.borderColor = "rgba(0, 0, 0, 0.1)";
     panel.style.backdropFilter = 'blur(18px)';
     sendToWhatsAppButton.style.color = "black";
+    sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
+    sendToWhatsAppButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
     formalizeButton.style.color = "black";
+    formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
+    formalizeButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
     textarea.style.backgroundColor = "rgba(255, 255, 255,0.0)";
     textarea.style.color = "black";
     resultArea.style.color = "black";
@@ -179,28 +186,30 @@ window.addEventListener("load", () => {
         }
     });
     toggleButton.addEventListener("mouseleave", () => {
-        toggleButton.style.backgroundColor = "rgba(255, 255, 255,0.77)";
+        toggleButton.style.backgroundColor = "rgba(255, 255, 255,0.55)";
         toggleButton.style.color = "rgb(29, 29, 29)";
     });
 
     formalizeButton.addEventListener("mouseenter", () => {
-        formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
-        formalizeButton.style.color = "white";
+        formalizeButton.style.backgroundColor = "rgba(33, 192, 99,0.6)";
+        formalizeButton.style.color = "black";
         formalizeButton.innerText = "Formalizar (Ctrl + Y)";
     });
     formalizeButton.addEventListener("mouseleave", () => {
-        formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.0)";
+        formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
+        formalizeButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
         formalizeButton.style.color = "black";
         formalizeButton.innerText = "Formalizar";
     });
 
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgb(28, 161, 83)";
-        sendToWhatsAppButton.style.color = "white";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(33, 192, 99,0.6)";
+        sendToWhatsAppButton.style.color = "black";
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
     });
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.0)";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
+        sendToWhatsAppButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
         sendToWhatsAppButton.style.color = "black";
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
     });
