@@ -343,7 +343,7 @@ sendToWhatsAppButton.onclick = () => {
 
 // Função que chama a OpenAI
 async function sendToOpenAI(text) {
-    const apiKey = "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"; // <-- SUA CHAVE AQUI
+    const apiKey = "API_KEY"; // <-- SUA CHAVE AQUI
     const url = "https://api.openai.com/v1/chat/completions";
 
     const response = await fetch(url, {
