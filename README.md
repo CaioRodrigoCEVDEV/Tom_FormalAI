@@ -28,9 +28,6 @@ Acesse a extensão diretamente na [Chrome Web Store](https://chromewebstore.goog
 3. Confirme a instalação clicando em **"Adicionar extensão"**.  
 4. Acesse o [WhatsApp Web](https://web.whatsapp.com/) e comece a usar o Tom Formal!  
 
-## 📄 Licença
-
-Este projeto está licenciado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 📫 Contato
 
