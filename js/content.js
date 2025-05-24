@@ -115,12 +115,17 @@ window.addEventListener("load", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
         toggleButton.style.color = "black";
         if (panel.style.display === 'none') {
-            alertPersonalizado("Clique ou Pressione Ctrl + Q para enviar o texto para o WhatsApp.");
+            alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.",50000);
         }
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "rgba(36, 38, 38, 0.77)";
         toggleButton.style.color = "white";
+        if (panel.style.display === 'none') {
+            alertPersonalizadoClose();
+        }else{
+            alertPersonalizadoClose();
+        }
     });
     
     formalizeButton.addEventListener("mouseenter", () => {
@@ -182,12 +187,17 @@ window.addEventListener("load", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
         toggleButton.style.color = "white";
         if (panel.style.display === 'none') {
-            alertPersonalizado("Clique ou Pressione Ctrl + Q para enviar o texto para o WhatsApp.");
+            alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.",50000);
         }
     });
     toggleButton.addEventListener("mouseleave", () => {
         toggleButton.style.backgroundColor = "rgba(255, 255, 255,0.55)";
         toggleButton.style.color = "rgb(29, 29, 29)";
+        if (panel.style.display === 'none') {
+            alertPersonalizadoClose();
+        }else{
+            alertPersonalizadoClose();
+        }
     });
 
     formalizeButton.addEventListener("mouseenter", () => {
@@ -233,7 +243,7 @@ toggleButton.onclick = () => {
             toggleButton.disabled = true;
             
             }  else {
-            alertPersonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.");
+            alertPersonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.",4000);
             }
         } 
         else {
@@ -251,7 +261,7 @@ toggleButton.onclick = () => {
                 }
             else {
                 //alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
-                alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+                alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!",4000);
             }
         
     }
@@ -268,7 +278,7 @@ formalizeButton.onclick = async () => {
     await new Promise(resolve => setTimeout(resolve, 1000)); 
     const inputText = textarea.value.trim();
     if (!inputText) {
-        alertPersonalizado("Por favor, digite um texto.");
+        alertPersonalizado("Por favor, digite um texto.",4000);
         return;
     }
 
@@ -313,7 +323,7 @@ document.body.appendChild(panel);
 sendToWhatsAppButton.onclick = () => {
     const outputText = resultArea.innerText.trim();
     if (outputText === "Texto formalizado aparecerá aqui.") {
-        alertPersonalizado("Por favor, formalize o texto antes de enviar.");
+        alertPersonalizado("Por favor, formalize o texto antes de enviar.",4000);
         return;
     }
 
@@ -337,13 +347,16 @@ sendToWhatsAppButton.onclick = () => {
         //sendToWhatsAppButton.disabled = true;
         panel.style.display = 'none';
     } else {
-        alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
+        alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!",4000);
     }
 };
 
 // Função que chama a OpenAI
+
 async function sendToOpenAI(text) {
-    const apiKey = "API_KEY"; // <-- SUA CHAVE AQUI
+
+
+    const apiKey = ""; // <-- SUA CHAVE AQUI
     const url = "https://api.openai.com/v1/chat/completions";
 
     const response = await fetch(url, {
@@ -371,8 +384,9 @@ async function sendToOpenAI(text) {
 };
 // alertPersonalizado personalizado
 
-function alertPersonalizado(message) {
+function alertPersonalizado(message,time) {
     let alertPersonalizado = document.getElementById("alertPersonalizado");
+    
     if (!alertPersonalizado) {
         alertPersonalizado = document.createElement("div");
         alertPersonalizado.id = "alertPersonalizado";
@@ -399,8 +413,40 @@ function alertPersonalizado(message) {
     setTimeout(() => {
         alertPersonalizado.style.opacity = "0";
         alertPersonalizado.remove(); 
-    }, 4000);
+    }, time);
   };
+
+
+function alertPersonalizadoClose() {
+    let alertPersonalizado2 = document.getElementById("alertPersonalizado");
+    
+    if (!alertPersonalizado2) {
+        alertPersonalizado2 = document.createElement("div");
+        alertPersonalizado2.id = "alertPersonalizado";
+        alertPersonalizado2.style = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0);
+        color: #fff;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+      `;
+      document.body.appendChild(alertPersonalizado2);
+    }
+    alertPersonalizado2.style.opacity = "1";
+
+    setTimeout(() => {
+        alertPersonalizado2.style.opacity = "0";
+        alertPersonalizado2.remove(); 
+    }, 1);
+  };
+
 
   
 // Adiciona as teclas de atalho
