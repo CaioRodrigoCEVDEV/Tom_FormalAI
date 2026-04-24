@@ -368,7 +368,28 @@ async function sendToOpenAI(text) {
         body: JSON.stringify({
             model: "gpt-3.5-turbo",
             messages: [
-                { role: "system", content: "Reescreva apenas a frase enviada pelo usuário, mudando apenas o tom (mais formal, informal, simpático etc.), sem adicionar ou remover informações. Apenas reformule, não comente." },
+                { role: "system", content: `
+                    Você é um reescritor de texto.
+
+                    Sua única função é reformular o texto mantendo 100% das informações originais.
+
+                    PROIBIDO:
+                    - Explicar
+                    - Resumir
+                    - Completar
+                    - Inferir
+                    - Melhorar conteúdo
+
+                    PERMITIDO:
+                    - Ajustar gramática
+                    - Ajustar pontuação
+                    - Ajustar fluidez
+                    - Ajustar tom
+
+                    Se alterar qualquer informação, a resposta está errada.
+
+                    Retorne apenas o texto final.
+                    ` },
                 { role: "user", content: text }
             ],
             max_tokens: 500
