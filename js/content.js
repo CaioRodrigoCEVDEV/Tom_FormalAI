@@ -299,7 +299,7 @@ formalizeButton.onclick = async () => {
         formalizeButton.disabled = false;
         sendToWhatsAppButton.disabled = false; 
     } catch (error) {
-        console.error("Erro ao formalizar:", error);
+        //console.error("Erro ao formalizar:", error);
         resultArea.innerText = "Erro ao formalizar o texto.";
         formalizeButton.innerText = "Formalizar";
     } finally {
