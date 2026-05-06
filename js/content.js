@@ -352,57 +352,27 @@ sendToWhatsAppButton.onclick = () => {
 };
 
 // Função que chama a OpenAI
-
 async function sendToOpenAI(text) {
 
-
-    const apiKey = ""; // <-- SUA CHAVE AQUI
-    const url = "https://api.openai.com/v1/chat/completions";
-
-    const response = await fetch(url, {
+    const response = await fetch("https://openai.caiorodrigocev.com.br/rewrite", {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${apiKey}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-                { role: "system", content: `
-                    Você é um reescritor de texto.
-
-                    Sua única função é reformular o texto mantendo 100% das informações originais.
-
-                    PROIBIDO:
-                    - Explicar
-                    - Resumir
-                    - Completar
-                    - Inferir
-                    - Melhorar conteúdo
-
-                    PERMITIDO:
-                    - Ajustar gramática
-                    - Ajustar pontuação
-                    - Ajustar fluidez
-                    - Ajustar tom
-
-                    Se alterar qualquer informação, a resposta está errada.
-
-                    Retorne apenas o texto final.
-                    ` },
-                { role: "user", content: text }
-            ],
-            max_tokens: 500
+            text: text
         })
     });
 
     if (!response.ok) {
-        throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+        throw new Error("Erro ao chamar API");
     }
 
     const data = await response.json();
-    return data.choices[0].message.content.trim();
-};
+
+    return data.rewrittenText;
+}
+
 // alertPersonalizado personalizado
 
 function alertPersonalizado(message,time) {
