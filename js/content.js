@@ -3,6 +3,10 @@ const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
 
+const INITIAL_RESULT_MESSAGE = 'Texto formalizado aparecerá aqui.';
+const API_OFFLINE_MESSAGE = 'API OFFLINE tente novamente mais tarde.';
+const API_TIMEOUT_MS = 20000;
+
 //painel oculto inicialmente
 const panel = document.createElement('div');
     panel.style.position = 'fixed';
@@ -61,7 +65,7 @@ resultArea.style.color = 'white';
 resultArea.style.opacity = '1'; // Totalmente visível
 resultArea.style.userSelect = 'text'; // Permite selecionar o texto
 resultArea.style.pointerEvents = 'auto'; // Permite interação
-resultArea.innerText = 'Texto formalizado aparecerá aqui.';
+resultArea.innerText = INITIAL_RESULT_MESSAGE;
 
 // Botão para enviar para o WhatsApp
 const sendToWhatsAppButton = document.createElement('button');
@@ -249,7 +253,7 @@ toggleButton.onclick = () => {
         else {
             // Se o painel já estiver visível, apenas o esconde
             panel.style.display = 'none'
-            resultArea.innerText = 'Texto formalizado aparecerá aqui.'; // Limpa o resultado
+            resultArea.innerText = INITIAL_RESULT_MESSAGE; // Limpa o resultado
             textarea.value = ''; // Limpa o textarea
             //sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
             
@@ -279,6 +283,11 @@ formalizeButton.onclick = async () => {
     const inputText = textarea.value.trim();
     if (!inputText) {
         alertPersonalizado("Por favor, digite um texto.",4000);
+        resultArea.innerText = INITIAL_RESULT_MESSAGE;
+        toggleButton.disabled = false;
+        formalizeButton.disabled = false;
+        sendToWhatsAppButton.disabled = false;
+        formalizeButton.innerText = "Formalizar";
         return;
     }
 
@@ -294,15 +303,14 @@ formalizeButton.onclick = async () => {
         const formalizedText = await sendToOpenAI('"' + inputText + '"');
         // Remove as aspas do início e do fim do texto formalizado
         resultArea.innerText = formalizedText.replace(/^"|"$/g, '');
-        formalizeButton.innerText = "Formalizar";
-        toggleButton.disabled = false;
-        formalizeButton.disabled = false;
         sendToWhatsAppButton.disabled = false; 
     } catch (error) {
-        //console.error("Erro ao formalizar:", error);
-        resultArea.innerText = "Erro ao formalizar o texto.";
-        formalizeButton.innerText = "Formalizar";
+        console.error("Erro ao formalizar:", error);
+        resultArea.innerText = API_OFFLINE_MESSAGE;
+        alertPersonalizado(API_OFFLINE_MESSAGE,4000);
+        sendToWhatsAppButton.disabled = false;
     } finally {
+        toggleButton.disabled = false;
         formalizeButton.disabled = false;
         formalizeButton.innerText = "Formalizar";
     }
@@ -322,7 +330,7 @@ document.body.appendChild(panel);
 
 sendToWhatsAppButton.onclick = () => {
     const outputText = resultArea.innerText.trim();
-    if (outputText === "Texto formalizado aparecerá aqui.") {
+    if (outputText === INITIAL_RESULT_MESSAGE || outputText === API_OFFLINE_MESSAGE || sendToWhatsAppButton.disabled) {
         alertPersonalizado("Por favor, formalize o texto antes de enviar.",4000);
         return;
     }
@@ -342,7 +350,7 @@ sendToWhatsAppButton.onclick = () => {
             bubbles: true
         });
         chatInput.dispatchEvent(pasteEvent);
-        resultArea.innerText = 'Texto formalizado aparecerá aqui.';
+        resultArea.innerText = INITIAL_RESULT_MESSAGE;
         textarea.value = '';
         //sendToWhatsAppButton.disabled = true;
         panel.style.display = 'none';
@@ -353,24 +361,37 @@ sendToWhatsAppButton.onclick = () => {
 
 // Função que chama a OpenAI
 async function sendToOpenAI(text) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
 
-    const response = await fetch("https://openai.caiorodrigocev.com.br/rewrite", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            text: text
-        })
-    });
+    try {
+        const response = await fetch("https://openai.caiorodrigocev.com.br/rewrite", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                text: text
+            }),
+            signal: controller.signal
+        });
 
-    if (!response.ok) {
-        throw new Error("Erro ao chamar API");
+        if (!response.ok) {
+            throw new Error("Erro ao chamar API");
+        }
+
+        const data = await response.json();
+
+        if (!data || !data.rewrittenText) {
+            throw new Error("Resposta inválida da API");
+        }
+
+        return data.rewrittenText;
+    } catch (error) {
+        throw new Error(API_OFFLINE_MESSAGE);
+    } finally {
+        clearTimeout(timeoutId);
     }
-
-    const data = await response.json();
-
-    return data.rewrittenText;
 }
 
 // alertPersonalizado personalizado
