@@ -81,19 +81,16 @@ sendToWhatsAppButton.style.cursor = 'pointer';
 sendToWhatsAppButton.style.marginBottom = '10px';
 //sendToWhatsAppButton.disabled = true; 
 
-window.addEventListener("load", () => {
-    const bgColor = window.getComputedStyle(document.body).backgroundColor;
-    console.log(bgColor);
-        // Função para verificar se a cor é escura
-        function isDark(color) {
-            const rgb = bgColor.match(/\d+/g).map(Number);
-            const luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
-            return luminance < 128; // valor de corte, pode ajustar conforme necessário
-        }
 
-        if (isDark(bgColor)) { 
+  function detectarTema() {
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    return darkModeMediaQuery.matches ? 'dark' : 'light';
+  }
+  
+window.addEventListener("load", () => {
+        if (detectarTema() === 'dark' ) { 
     // Se a tag dark estiver presente, aplique o estilo escuro
-    console.log("Tema escuro ativado");
+    //console.log("Tema escuro ativado");
 
     toggleButton.style.fontWeight = "bold";
     toggleButton.style.fontSize = "12px";
@@ -157,7 +154,7 @@ window.addEventListener("load", () => {
 
 } else {
     // Se a tag dark não estiver presente, aplique o estilo claro
-    console.log("Tema claro ativado");
+    //console.log("Tema claro ativado");
 
     toggleButton.style.fontWeight = "bold";
     toggleButton.style.fontSize = "12px";
