@@ -3,6 +3,63 @@ const toggleButton = document.createElement("button");
 toggleButton.textContent = "F";
 document.body.appendChild(toggleButton);
 
+
+// Permitir arrastar o ToggleButton pela tela
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+toggleButton.addEventListener("mousedown", (e) => {
+    isDragging = true;
+
+    // Remove posicionamento bottom durante o drag
+    toggleButton.style.bottom = "auto";
+
+    offsetX = e.clientX - toggleButton.getBoundingClientRect().left;
+    offsetY = e.clientY - toggleButton.getBoundingClientRect().top;
+
+    toggleButton.style.cursor = "grabbing";
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    const x = e.clientX - offsetX;
+    const y = e.clientY - offsetY;
+
+    // Move o botão
+    toggleButton.style.left = `${x}px`;
+    toggleButton.style.top = `${y}px`;
+    toggleButton.style.right = "auto";
+    toggleButton.style.bottom = "auto";
+
+    // Move o painel junto
+    panel.style.left = `${x + 52}px`; // Alinha horizontalmente com o botão
+    panel.style.top = `${y - 300}px`; // distância acima do botão
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+});
+
+document.addEventListener("mouseup", () => {
+    if (isDragging) {
+
+        // Salva posição do botão
+        localStorage.setItem("toggleButtonPosition", JSON.stringify({
+            left: parseInt(toggleButton.style.left),
+            top: parseInt(toggleButton.style.top)
+        }));
+
+        // Salva posição do painel
+        localStorage.setItem("panelPosition", JSON.stringify({
+            left: parseInt(panel.style.left),
+            top: parseInt(panel.style.top)
+        }));
+    }
+
+    isDragging = false;
+    toggleButton.style.cursor = "pointer";
+});
+
 const INITIAL_RESULT_MESSAGE = 'Texto formalizado aparecerá aqui.';
 const API_OFFLINE_MESSAGE = 'API OFFLINE tente novamente mais tarde.';
 const API_TIMEOUT_MS = 20000;
@@ -21,7 +78,7 @@ const panel = document.createElement('div');
     panel.style.padding = '15px';
     panel.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
     panel.style.fontFamily = 'Arial, sans-serif';
-    panel.style.display = 'none';
+    panel.style.display = 'none'; // inicia como visível para detectar o tema corretamente
 
 //textarea para digitar
 const textarea = document.createElement('textarea');
@@ -96,8 +153,10 @@ window.addEventListener("load", () => {
     toggleButton.style.fontSize = "12px";
     toggleButton.style.color = "white";
     toggleButton.style.position = "fixed";
-    toggleButton.style.bottom = "70px";
+    if (!savedButtonPosition) {
+    toggleButton.style.top = "70px";
     toggleButton.style.right = "20px";
+    }
     toggleButton.style.zIndex = "9999";
     toggleButton.style.padding = "10px 20px";
     toggleButton.style.border = "none";
@@ -232,6 +291,17 @@ toggleButton.onclick = () => {
 
     const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input.w-full.rounded-full.bg-gray-100,textarea');
     
+
+    if (panel.style.display === 'none') {
+    const buttonRect = toggleButton.getBoundingClientRect();
+
+    panel.style.left = `${buttonRect.left + 52}px`;
+    panel.style.top = `${buttonRect.top - 300}px`;
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+}
+
+
     if (chatInput) {
         // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp somente o que está selecionado
         const selection = window.getSelection();
@@ -249,7 +319,7 @@ toggleButton.onclick = () => {
         } 
         else {
             // Se o painel já estiver visível, apenas o esconde
-            panel.style.display = 'none'
+            panel.style.display = 'none';
             resultArea.innerText = INITIAL_RESULT_MESSAGE; // Limpa o resultado
             textarea.value = ''; // Limpa o textarea
             //sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
@@ -322,6 +392,31 @@ panel.appendChild(resultArea);
 // Adiciona tudo no body
 document.body.appendChild(toggleButton);
 document.body.appendChild(panel);
+
+
+
+
+// Carrega posição salva
+const savedButtonPosition = localStorage.getItem("toggleButtonPosition");
+const savedPanelPosition = localStorage.getItem("panelPosition");
+
+if (savedButtonPosition) {
+    const position = JSON.parse(savedButtonPosition);
+
+    toggleButton.style.left = `${position.left}px`;
+    toggleButton.style.top = `${position.top}px`;
+    toggleButton.style.right = "auto";
+    toggleButton.style.bottom = "auto";
+}
+
+if (savedPanelPosition) {
+    const position = JSON.parse(savedPanelPosition);
+
+    panel.style.left = `${position.left}px`;
+    panel.style.top = `${position.top}px`;
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+}
 
 
 
