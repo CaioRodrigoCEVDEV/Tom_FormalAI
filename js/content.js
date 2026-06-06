@@ -1,457 +1,490 @@
+(() => {
+if (window.__tomFormalInitialized) {
+    return;
+}
+
+window.__tomFormalInitialized = true;
+
+const INITIAL_RESULT_MESSAGE = "Texto formalizado aparecera aqui.";
+const API_OFFLINE_MESSAGE = "API OFFLINE. Tente novamente mais tarde.";
+const API_TIMEOUT_MS = 20000;
+const STORAGE_KEYS = {
+    button: "toggleButtonPosition",
+    panel: "panelPosition"
+};
 
 const toggleButton = document.createElement("button");
-toggleButton.textContent = "F";
-document.body.appendChild(toggleButton);
+const panel = document.createElement("div");
+const textarea = document.createElement("textarea");
+const formalizeButton = document.createElement("button");
+const sendToWhatsAppButton = document.createElement("button");
+const resultArea = document.createElement("div");
 
-
-// Permitir arrastar o ToggleButton pela tela
 let isDragging = false;
 let offsetX = 0;
 let offsetY = 0;
+let toastTimeoutId = null;
+let currentTheme = detectTheme();
+let pendingReplacement = null;
 
-toggleButton.addEventListener("mousedown", (e) => {
-    isDragging = true;
+toggleButton.textContent = "F";
+toggleButton.type = "button";
 
-    // Remove posicionamento bottom durante o drag
-    toggleButton.style.bottom = "auto";
+panel.style.position = "fixed";
+panel.style.bottom = "120px";
+panel.style.right = "20px";
+panel.style.width = "300px";
+panel.style.border = "1px solid #ccc";
+panel.style.borderRadius = "25px";
+panel.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0)";
+panel.style.padding = "15px";
+panel.style.zIndex = "2147483647";
+panel.style.fontFamily = "Arial, sans-serif";
+panel.style.display = "none";
 
-    offsetX = e.clientX - toggleButton.getBoundingClientRect().left;
-    offsetY = e.clientY - toggleButton.getBoundingClientRect().top;
+textarea.placeholder = "Digite seu texto aqui...";
+textarea.style.fontFamily = "Arial, sans-serif";
+textarea.style.zIndex = "2147483647";
+textarea.style.width = "100%";
+textarea.style.height = "100px";
+textarea.style.marginBottom = "10px";
+textarea.style.padding = "0px";
+textarea.style.borderRadius = "5px";
+textarea.style.border = "none";
+textarea.style.resize = "vertical";
+textarea.autocomplete = "off";
 
-    toggleButton.style.cursor = "grabbing";
-});
-
-document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
-
-    const x = e.clientX - offsetX;
-    const y = e.clientY - offsetY;
-
-    // Move o botão
-    toggleButton.style.left = `${x}px`;
-    toggleButton.style.top = `${y}px`;
-    toggleButton.style.right = "auto";
-    toggleButton.style.bottom = "auto";
-
-    // Move o painel junto
-    panel.style.left = `${x + 52}px`; // Alinha horizontalmente com o botão
-    panel.style.top = `${y - 300}px`; // distância acima do botão
-    panel.style.right = "auto";
-    panel.style.bottom = "auto";
-});
-
-document.addEventListener("mouseup", () => {
-    if (isDragging) {
-
-        // Salva posição do botão
-        localStorage.setItem("toggleButtonPosition", JSON.stringify({
-            left: parseInt(toggleButton.style.left),
-            top: parseInt(toggleButton.style.top)
-        }));
-
-        // Salva posição do painel
-        localStorage.setItem("panelPosition", JSON.stringify({
-            left: parseInt(panel.style.left),
-            top: parseInt(panel.style.top)
-        }));
-    }
-
-    isDragging = false;
-    toggleButton.style.cursor = "pointer";
-});
-
-const INITIAL_RESULT_MESSAGE = 'Texto formalizado aparecerá aqui.';
-const API_OFFLINE_MESSAGE = 'API OFFLINE tente novamente mais tarde.';
-const API_TIMEOUT_MS = 20000;
-
-//painel oculto inicialmente
-const panel = document.createElement('div');
-    panel.style.position = 'fixed';
-    panel.style.bottom = '120px';
-    panel.style.right = '20px';
-    panel.style.width = '300px';
-    panel.style.backgroundColor = "rgba(36, 38, 38, 0.8)"; 
-    panel.style.border = '1px solid #ccc';
-    panel.style.borderColor = "rgba(33, 192, 99,0.0)";
-    panel.style.borderRadius = '25px';
-    panel.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0)';
-    panel.style.padding = '15px';
-    panel.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
-    panel.style.fontFamily = 'Arial, sans-serif';
-    panel.style.display = 'none'; // inicia como visível para detectar o tema corretamente
-
-//textarea para digitar
-const textarea = document.createElement('textarea');
-textarea.style.fontFamily = 'Arial, sans-serif';
-textarea.style.zIndex = '2147483647'; // valor máximo para garantir que fique acima de outros elementos
-textarea.placeholder = 'Digite seu texto aqui...';
-textarea.style.width = '100%';
-textarea.style.height = '100px';
-textarea.style.marginBottom = '10px';
-textarea.style.padding = '0px';
-textarea.style.borderRadius = '5px';
-textarea.style.color = 'white';
-textarea.style.backgroundColor = "rgba(36, 38, 38, 0.0)"; 
-textarea.style.border = 'none';
-
-//botão de formalizar
-const formalizeButton = document.createElement('button');
+formalizeButton.type = "button";
 formalizeButton.innerText = "Formalizar";
-formalizeButton.style.width = '100%';
-formalizeButton.style.padding = '10px';
-formalizeButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)"; 
-formalizeButton.style.color = 'white';
-formalizeButton.style.border = '1px solid #ccc';
-formalizeButton.style.borderColor = "rgba(33, 192, 99,0.0)";
-formalizeButton.style.borderRadius = '25px';
-formalizeButton.style.cursor = 'pointer';
-formalizeButton.style.marginBottom = '10px';
+formalizeButton.style.width = "100%";
+formalizeButton.style.padding = "10px";
+formalizeButton.style.border = "1px solid #ccc";
+formalizeButton.style.borderRadius = "25px";
+formalizeButton.style.cursor = "pointer";
+formalizeButton.style.marginBottom = "10px";
 
-//area de resultado
-const resultArea = document.createElement('div');
-resultArea.style.marginTop = '10px';
-resultArea.style.marginRight = '10px';
-resultArea.style.width = '100%';
-resultArea.style.padding = '0px';
-resultArea.style.backgroundColor = 'rgb(82, 82, 82);';
-resultArea.style.minHeight = '50px';
-resultArea.style.maxHeight = '200px';
-resultArea.style.overflowY = 'auto';
-resultArea.style.whiteSpace = 'pre-wrap'; // Mantém quebras de linha
-resultArea.style.color = 'white'; 
-resultArea.style.opacity = '1'; // Totalmente visível
-resultArea.style.userSelect = 'text'; // Permite selecionar o texto
-resultArea.style.pointerEvents = 'auto'; // Permite interação
+sendToWhatsAppButton.type = "button";
+sendToWhatsAppButton.id = "sendToWhatsAppButton";
+sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
+sendToWhatsAppButton.style.width = "100%";
+sendToWhatsAppButton.style.padding = "10px";
+sendToWhatsAppButton.style.border = "1px solid #ccc";
+sendToWhatsAppButton.style.borderRadius = "25px";
+sendToWhatsAppButton.style.cursor = "pointer";
+sendToWhatsAppButton.style.marginBottom = "10px";
+
+resultArea.style.marginTop = "10px";
+resultArea.style.marginRight = "10px";
+resultArea.style.width = "100%";
+resultArea.style.padding = "0px";
+resultArea.style.minHeight = "50px";
+resultArea.style.maxHeight = "200px";
+resultArea.style.overflowY = "auto";
+resultArea.style.whiteSpace = "pre-wrap";
+resultArea.style.opacity = "1";
+resultArea.style.userSelect = "text";
+resultArea.style.pointerEvents = "auto";
 resultArea.innerText = INITIAL_RESULT_MESSAGE;
 
-// Botão para enviar para o WhatsApp
-const sendToWhatsAppButton = document.createElement('button');
-sendToWhatsAppButton.id = 'sendToWhatsAppButton';
-sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
-sendToWhatsAppButton.style.width = '100%';
-sendToWhatsAppButton.style.padding = '10px';
-sendToWhatsAppButton.style.color = 'white';
-sendToWhatsAppButton.style.border = '1px solid #ccc';
-sendToWhatsAppButton.style.borderColor = "rgba(33, 192, 99,0.0)";
-sendToWhatsAppButton.style.borderRadius = '25px';
-sendToWhatsAppButton.style.cursor = 'pointer';
-sendToWhatsAppButton.style.marginBottom = '10px';
-//sendToWhatsAppButton.disabled = true; 
+panel.appendChild(textarea);
+panel.appendChild(formalizeButton);
+panel.appendChild(sendToWhatsAppButton);
+panel.appendChild(resultArea);
 
+document.body.appendChild(toggleButton);
+document.body.appendChild(panel);
 
-  function detectarTema() {
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    return darkModeMediaQuery.matches ? 'dark' : 'light';
-  }
-  
-window.addEventListener("load", () => {
-        if (detectarTema() === 'dark' ) { 
-    // Se a tag dark estiver presente, aplique o estilo escuro
-    //console.log("Tema escuro ativado");
+applyTheme(currentTheme);
+registerThemeListener();
+registerHoverHandlers();
+registerDragHandlers();
+registerShortcutHandlers();
 
-    toggleButton.style.fontWeight = "bold";
-    toggleButton.style.fontSize = "12px";
-    toggleButton.style.color = "white";
-    toggleButton.style.position = "fixed";
-    if (!savedButtonPosition) {
-    toggleButton.style.top = "70px";
-    toggleButton.style.right = "20px";
+toggleButton.onclick = async () => {
+    const shouldOpen = panel.style.display === "none";
+
+    if (!shouldOpen) {
+        resetPanel();
+        return;
     }
-    toggleButton.style.zIndex = "9999";
-    toggleButton.style.padding = "10px 20px";
-    toggleButton.style.border = "none";
-    toggleButton.style.borderRadius = "100px";
-    toggleButton.style.cursor = "pointer";
-    toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
-    toggleButton.style.color = "white";
-    //toggleButton.style.backgroundColor = "#242626";
-    toggleButton.style.backgroundColor = "rgba(36, 38, 38, 0.77)"; 
-    panel.style.backgroundColor = "rgba(36, 38, 38, 0.77)"; 
-    panel.style.backdropFilter = 'blur(18px)';
-    textarea.style.backgroundColor = "rgba(36, 38, 38, 0.0)"; 
-    sendToWhatsAppButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)";
-    // hover
-    toggleButton.addEventListener("mouseenter", () => {
-        toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-        toggleButton.style.color = "black";
-        if (panel.style.display === 'none') {
-            alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.",50000);
-        }
-    });
-    toggleButton.addEventListener("mouseleave", () => {
-        toggleButton.style.backgroundColor = "rgba(36, 38, 38, 0.77)";
-        toggleButton.style.color = "white";
-        if (panel.style.display === 'none') {
-            alertPersonalizadoClose();
-        }else{
-            alertPersonalizadoClose();
-        }
-    });
-    
-    formalizeButton.addEventListener("mouseenter", () => {
-        //formalizeButton.style.backgroundColor = "rgb(28, 161, 83)";
-        formalizeButton.style.backgroundColor = "rgba(33, 192, 99,0.3)";
-        formalizeButton.style.color = "white";
-        formalizeButton.innerText = "Formalizar (Ctrl + Y)";
-    });
-    formalizeButton.addEventListener("mouseleave", () => {
-        formalizeButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)"; 
-        formalizeButton.style.color = "white";
-        formalizeButton.innerText = "Formalizar";
-    });
 
-    sendToWhatsAppButton.addEventListener("mouseenter", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgba(33, 192, 99,0.3)";
-        sendToWhatsAppButton.style.color = "white";
-        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
-    });
-    sendToWhatsAppButton.addEventListener("mouseleave", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)"; 
-        sendToWhatsAppButton.style.color = "white";
-        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
-    });
+    const chatInput = getChatInput();
+    const selectionText = captureReplacementSelection(chatInput);
 
-} else {
-    // Se a tag dark não estiver presente, aplique o estilo claro
-    //console.log("Tema claro ativado");
+    if (selectionText) {
+        textarea.value = selectionText;
+    } else if (chatInput && !textarea.value.trim()) {
+        textarea.value = getInputText(chatInput);
+    }
+
+    positionPanelNearButton();
+    panel.style.display = "block";
+
+    if (textarea.value.trim()) {
+        await formalizeText();
+    } else {
+        textarea.focus();
+    }
+};
+
+formalizeButton.onclick = async () => {
+    await formalizeText();
+};
+
+sendToWhatsAppButton.onclick = () => {
+    const outputText = resultArea.innerText.trim();
+
+    if (
+        outputText === INITIAL_RESULT_MESSAGE ||
+        outputText === API_OFFLINE_MESSAGE ||
+        sendToWhatsAppButton.disabled
+    ) {
+        showToast("Por favor, formalize o texto antes de enviar.", 4000);
+        return;
+    }
+
+    const chatInput = getChatInput();
+
+    if (!chatInput) {
+        showToast("Campo de mensagem nao encontrado. Certifique-se de que esta na conversa certa!", 4000);
+        return;
+    }
+
+    insertTextIntoChatInput(chatInput, outputText, pendingReplacement);
+    resetPanel();
+};
+
+loadSavedPositions().catch((error) => {
+    console.error("Erro ao carregar posicoes salvas:", error);
+});
+
+function detectTheme() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function registerThemeListener() {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    if (typeof mediaQuery.addEventListener === "function") {
+        mediaQuery.addEventListener("change", (event) => {
+            currentTheme = event.matches ? "dark" : "light";
+            applyTheme(currentTheme);
+        });
+    }
+}
+
+function applyTheme(theme) {
+    const isDark = theme === "dark";
 
     toggleButton.style.fontWeight = "bold";
     toggleButton.style.fontSize = "12px";
-    toggleButton.style.color = "white";
     toggleButton.style.position = "fixed";
-    toggleButton.style.bottom = "70px";
-    toggleButton.style.right = "20px";
     toggleButton.style.zIndex = "9999";
     toggleButton.style.padding = "10px 20px";
     toggleButton.style.border = "none";
     toggleButton.style.borderRadius = "100px";
     toggleButton.style.cursor = "pointer";
     toggleButton.style.boxShadow = "0px 4px 8px rgba(0,0,0,0.2)";
-    toggleButton.style.color = "rgb(94, 94, 94)";
-    toggleButton.style.backgroundColor = "rgba(255, 255, 255, 0.77)"; 
-    panel.style.backgroundColor = "rgba(255, 255, 255, 0.33)"; 
-    panel.style.borderColor = "rgba(0, 0, 0, 0.1)";
-    panel.style.backdropFilter = 'blur(18px)';
-    sendToWhatsAppButton.style.color = "black";
-    sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
-    sendToWhatsAppButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
-    formalizeButton.style.color = "black";
-    formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
-    formalizeButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
-    textarea.style.backgroundColor = "rgba(255, 255, 255,0.0)";
-    textarea.style.color = "black";
-    resultArea.style.color = "black";
+    toggleButton.style.top = toggleButton.style.top || "70px";
+    toggleButton.style.right = toggleButton.style.right || "20px";
+    toggleButton.style.bottom = "auto";
 
-    // hover
+    panel.style.backdropFilter = "blur(18px)";
+
+    if (isDark) {
+        toggleButton.style.color = "white";
+        toggleButton.style.backgroundColor = "rgba(36, 38, 38, 0.77)";
+        panel.style.backgroundColor = "rgba(36, 38, 38, 0.77)";
+        panel.style.borderColor = "rgba(33, 192, 99, 0.0)";
+        textarea.style.backgroundColor = "rgba(36, 38, 38, 0.0)";
+        textarea.style.color = "white";
+        formalizeButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)";
+        formalizeButton.style.color = "white";
+        formalizeButton.style.borderColor = "rgba(33, 192, 99, 0.0)";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(37, 37, 37, 0.5)";
+        sendToWhatsAppButton.style.color = "white";
+        sendToWhatsAppButton.style.borderColor = "rgba(33, 192, 99, 0.0)";
+        resultArea.style.color = "white";
+    } else {
+        toggleButton.style.color = "rgb(94, 94, 94)";
+        toggleButton.style.backgroundColor = "rgba(255, 255, 255, 0.77)";
+        panel.style.backgroundColor = "rgba(255, 255, 255, 0.33)";
+        panel.style.borderColor = "rgba(0, 0, 0, 0.1)";
+        textarea.style.backgroundColor = "rgba(255, 255, 255, 0.0)";
+        textarea.style.color = "black";
+        formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
+        formalizeButton.style.color = "black";
+        formalizeButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
+        sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
+        sendToWhatsAppButton.style.color = "black";
+        sendToWhatsAppButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
+        resultArea.style.color = "black";
+    }
+}
+
+function registerHoverHandlers() {
     toggleButton.addEventListener("mouseenter", () => {
         toggleButton.style.backgroundColor = "rgb(33, 192, 99)";
-        toggleButton.style.color = "white";
-        if (panel.style.display === 'none') {
-            alertPersonalizado("Clique ou Pressione Ctrl + Q para formalizar o texto.",50000);
+        toggleButton.style.color = currentTheme === "dark" ? "black" : "white";
+
+        if (panel.style.display === "none") {
+            showToast("Clique ou pressione Ctrl + Q para abrir o painel.", 5000);
         }
     });
+
     toggleButton.addEventListener("mouseleave", () => {
-        toggleButton.style.backgroundColor = "rgba(255, 255, 255,0.55)";
-        toggleButton.style.color = "rgb(29, 29, 29)";
-        if (panel.style.display === 'none') {
-            alertPersonalizadoClose();
-        }else{
-            alertPersonalizadoClose();
-        }
+        applyTheme(currentTheme);
+        hideToast();
     });
 
     formalizeButton.addEventListener("mouseenter", () => {
-        formalizeButton.style.backgroundColor = "rgba(33, 192, 99,0.6)";
-        formalizeButton.style.color = "black";
+        formalizeButton.style.backgroundColor = currentTheme === "dark" ? "rgba(33, 192, 99, 0.3)" : "rgba(33, 192, 99, 0.6)";
         formalizeButton.innerText = "Formalizar (Ctrl + Y)";
     });
+
     formalizeButton.addEventListener("mouseleave", () => {
-        formalizeButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
-        formalizeButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
-        formalizeButton.style.color = "black";
+        applyTheme(currentTheme);
         formalizeButton.innerText = "Formalizar";
     });
 
     sendToWhatsAppButton.addEventListener("mouseenter", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgba(33, 192, 99,0.6)";
-        sendToWhatsAppButton.style.color = "black";
+        sendToWhatsAppButton.style.backgroundColor = currentTheme === "dark" ? "rgba(33, 192, 99, 0.3)" : "rgba(33, 192, 99, 0.6)";
         sendToWhatsAppButton.innerText = "Enviar para o WhatsApp (Ctrl + Q)";
     });
+
     sendToWhatsAppButton.addEventListener("mouseleave", () => {
-        sendToWhatsAppButton.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
-        sendToWhatsAppButton.style.borderColor = "rgba(0, 0, 0, 0.1)";
-        sendToWhatsAppButton.style.color = "black";
-        sendToWhatsAppButton.innerText = "Enviar para o WhatsApp";
+        applyTheme(currentTheme);
+        sendToWhatsAppButton.innerText = "Inserir no WhatsApp";
+    });
+}
+
+function registerDragHandlers() {
+    toggleButton.addEventListener("mousedown", (event) => {
+        isDragging = true;
+        toggleButton.style.bottom = "auto";
+        offsetX = event.clientX - toggleButton.getBoundingClientRect().left;
+        offsetY = event.clientY - toggleButton.getBoundingClientRect().top;
+        toggleButton.style.cursor = "grabbing";
     });
 
-}});
+    document.addEventListener("mousemove", (event) => {
+        if (!isDragging) {
+            return;
+        }
 
-// Toggle mostrar/esconder painel
-toggleButton.onclick = () => {
+        const buttonWidth = toggleButton.offsetWidth;
+        const buttonHeight = toggleButton.offsetHeight;
+        const maxX = Math.max(0, window.innerWidth - buttonWidth);
+        const maxY = Math.max(0, window.innerHeight - buttonHeight);
+        const x = clamp(event.clientX - offsetX, 0, maxX);
+        const y = clamp(event.clientY - offsetY, 0, maxY);
 
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"], input.w-full.rounded-full.bg-gray-100,textarea');
-    
+        toggleButton.style.left = `${x}px`;
+        toggleButton.style.top = `${y}px`;
+        toggleButton.style.right = "auto";
+        toggleButton.style.bottom = "auto";
 
-    if (panel.style.display === 'none') {
+        if (panel.style.display === "block") {
+            positionPanelNearButton();
+        }
+    });
+
+    document.addEventListener("mouseup", async () => {
+        if (!isDragging) {
+            return;
+        }
+
+        isDragging = false;
+        toggleButton.style.cursor = "pointer";
+        await savePositions();
+    });
+}
+
+function registerShortcutHandlers() {
+    document.addEventListener("keydown", (event) => {
+        if (!event.ctrlKey || event.repeat) {
+            return;
+        }
+
+        const key = event.key.toLowerCase();
+
+        if (key === "q") {
+            event.preventDefault();
+
+            if (panel.style.display === "block") {
+                sendToWhatsAppButton.click();
+            } else {
+                toggleButton.click();
+            }
+        }
+
+        if (key === "y" && panel.style.display === "block") {
+            event.preventDefault();
+            formalizeButton.click();
+        }
+    });
+}
+
+function positionPanelNearButton() {
     const buttonRect = toggleButton.getBoundingClientRect();
+    const panelWidth = panel.offsetWidth || 300;
+    const panelHeight = panel.offsetHeight || 260;
+    const x = clamp(buttonRect.left + 52, 0, Math.max(0, window.innerWidth - panelWidth - 16));
+    const y = clamp(buttonRect.top - panelHeight, 0, Math.max(0, window.innerHeight - panelHeight - 16));
 
-    panel.style.left = `${buttonRect.left + 52}px`;
-    panel.style.top = `${buttonRect.top - 300}px`;
+    panel.style.left = `${x}px`;
+    panel.style.top = `${y}px`;
     panel.style.right = "auto";
     panel.style.bottom = "auto";
 }
 
+function getChatInput() {
+    const selectors = [
+        '[contenteditable="true"][data-tab="10"]',
+        '[contenteditable="true"][data-tab="6"]',
+        'footer [contenteditable="true"]',
+        'div[contenteditable="true"][role="textbox"]',
+        'div[contenteditable="true"][aria-placeholder]',
+        'input.w-full.rounded-full.bg-gray-100',
+        '[placeholder="Digite uma mensagem"]'
+    ];
 
-    if (chatInput) {
-        // Preenche o campo de entrada do painel flutuante com o texto do WhatsApp somente o que está selecionado
-        const selection = window.getSelection();
-        if (panel.style.display === 'none') {
-            // Verifica se há texto selecionado
-            if (selection && selection.toString().trim()) {
-            textarea.value = selection.toString().trim();
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            formalizeButton.click();
-            toggleButton.disabled = true;
-            
-            }  else {
-            alertPersonalizado("Nenhum texto selecionado. Selecione o texto que deseja formalizar.",4000);
+    for (const selector of selectors) {
+        const elements = document.querySelectorAll(selector);
+
+        for (const element of elements) {
+            if (!panel.contains(element) && element !== textarea) {
+                return element;
             }
-        } 
-        else {
-            // Se o painel já estiver visível, apenas o esconde
-            panel.style.display = 'none';
-            resultArea.innerText = INITIAL_RESULT_MESSAGE; // Limpa o resultado
-            textarea.value = ''; // Limpa o textarea
-            //sendToWhatsAppButton.disabled = true; // desabilita o botão do WhatsApp
-            
         }
-    } else {
-            if (panel.style.display === 'block') {
-                // Se o painel já estiver visível, apenas o esconde
-                panel.style.display = 'none'
-                }
-            else {
-                //alert("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!");
-                alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!",4000);
-            }
-        
     }
-};
 
-// Botão formalizar texto
-formalizeButton.onclick = async () => {
-    formalizeButton.innerText = "Formalizando, aguarde...";
-    resultArea.innerText = "";
-    toggleButton.disabled = true;
-    formalizeButton.disabled = true;
-    sendToWhatsAppButton.disabled = true;
-    // Aguarda 1.5 segundos para evitar chamadas excessivas
-    await new Promise(resolve => setTimeout(resolve, 1000)); 
-    const inputText = textarea.value.trim();
-    if (!inputText) {
-        alertPersonalizado("Por favor, digite um texto.",4000);
-        resultArea.innerText = INITIAL_RESULT_MESSAGE;
-        toggleButton.disabled = false;
-        formalizeButton.disabled = false;
-        sendToWhatsAppButton.disabled = false;
-        formalizeButton.innerText = "Formalizar";
+    return null;
+}
+
+function getInputText(inputElement) {
+    if (!inputElement) {
+        return "";
+    }
+
+    if (typeof inputElement.value === "string") {
+        return inputElement.value.trim();
+    }
+
+    return inputElement.textContent?.trim() || "";
+}
+
+function captureReplacementSelection(inputElement) {
+    pendingReplacement = null;
+
+    if (!inputElement) {
+        return window.getSelection()?.toString().trim() || "";
+    }
+
+    if (typeof inputElement.value === "string") {
+        const start = inputElement.selectionStart;
+        const end = inputElement.selectionEnd;
+
+        if (typeof start === "number" && typeof end === "number" && end > start) {
+            pendingReplacement = { type: "input", start, end };
+            return inputElement.value.slice(start, end).trim();
+        }
+
+        return window.getSelection()?.toString().trim() || "";
+    }
+
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+        return "";
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if (!inputElement.contains(range.commonAncestorContainer)) {
+        return selection.toString().trim();
+    }
+
+    pendingReplacement = {
+        type: "contenteditable",
+        range: range.cloneRange()
+    };
+
+    return selection.toString().trim();
+}
+
+function insertTextIntoChatInput(inputElement, text, replacement) {
+    inputElement.focus();
+
+    if (typeof inputElement.value === "string") {
+        if (replacement?.type === "input") {
+            inputElement.setSelectionRange(replacement.start, replacement.end);
+            inputElement.setRangeText(text, replacement.start, replacement.end, "end");
+        } else {
+            inputElement.value = text;
+        }
+
+        inputElement.dispatchEvent(new Event("input", { bubbles: true }));
         return;
     }
 
-    //resultArea.innerText = "Formalizando, aguarde...";
+    const selection = window.getSelection();
+    const range = replacement?.type === "contenteditable" ? replacement.range.cloneRange() : document.createRange();
+
+    if (replacement?.type !== "contenteditable") {
+        range.selectNodeContents(inputElement);
+        range.collapse(false);
+    }
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    const inserted = document.execCommand("insertText", false, text);
+
+    if (!inserted) {
+        inputElement.textContent = text;
+        inputElement.dispatchEvent(new InputEvent("input", {
+            bubbles: true,
+            data: text,
+            inputType: "insertText"
+        }));
+    }
+}
+
+async function formalizeText() {
+    const inputText = textarea.value.trim();
+
+    if (!inputText) {
+        showToast("Por favor, digite um texto.", 4000);
+        resultArea.innerText = INITIAL_RESULT_MESSAGE;
+        textarea.focus();
+        return;
+    }
+
+    resultArea.innerText = "";
     formalizeButton.innerText = "Formalizando, aguarde...";
-    
-    // Desabilita o botão enquanto processa
+    toggleButton.disabled = true;
     formalizeButton.disabled = true;
-    sendToWhatsAppButton.disabled = true; 
-    
-    //formalizeButton.innerText = "Formalizando...";
+    sendToWhatsAppButton.disabled = true;
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     try {
-        const formalizedText = await sendToOpenAI('"' + inputText + '"');
-        // Remove as aspas do início e do fim do texto formalizado
-        resultArea.innerText = formalizedText.replace(/^"|"$/g, '');
-        sendToWhatsAppButton.disabled = false; 
+        const formalizedText = await sendToOpenAI(`"${inputText}"`);
+        resultArea.innerText = formalizedText.replace(/^"|"$/g, "");
+        sendToWhatsAppButton.disabled = false;
     } catch (error) {
         console.error("Erro ao formalizar:", error);
         resultArea.innerText = API_OFFLINE_MESSAGE;
-        alertPersonalizado(API_OFFLINE_MESSAGE,4000);
+        showToast(error.message || API_OFFLINE_MESSAGE, 4000);
         sendToWhatsAppButton.disabled = false;
     } finally {
         toggleButton.disabled = false;
         formalizeButton.disabled = false;
         formalizeButton.innerText = "Formalizar";
     }
-};
-
-// Adiciona elementos no painel
-panel.appendChild(textarea);
-panel.appendChild(formalizeButton);
-panel.appendChild(sendToWhatsAppButton); 
-panel.appendChild(resultArea);
-
-// Adiciona tudo no body
-document.body.appendChild(toggleButton);
-document.body.appendChild(panel);
-
-
-
-
-// Carrega posição salva
-const savedButtonPosition = localStorage.getItem("toggleButtonPosition");
-const savedPanelPosition = localStorage.getItem("panelPosition");
-
-if (savedButtonPosition) {
-    const position = JSON.parse(savedButtonPosition);
-
-    toggleButton.style.left = `${position.left}px`;
-    toggleButton.style.top = `${position.top}px`;
-    toggleButton.style.right = "auto";
-    toggleButton.style.bottom = "auto";
 }
 
-if (savedPanelPosition) {
-    const position = JSON.parse(savedPanelPosition);
-
-    panel.style.left = `${position.left}px`;
-    panel.style.top = `${position.top}px`;
-    panel.style.right = "auto";
-    panel.style.bottom = "auto";
-}
-
-
-
-sendToWhatsAppButton.onclick = () => {
-    const outputText = resultArea.innerText.trim();
-    if (outputText === INITIAL_RESULT_MESSAGE || outputText === API_OFFLINE_MESSAGE || sendToWhatsAppButton.disabled) {
-        alertPersonalizado("Por favor, formalize o texto antes de enviar.",4000);
-        return;
-    }
-
-    const chatInput = document.querySelector('[contenteditable="true"][data-tab="10"],[placeholder="Digite uma mensagem"]');
-
-    if (chatInput) {
-        chatInput.focus();
-        chatInput.value = outputText;
-        // Dispara o evento de input para que o sistema reconheça
-        chatInput.dispatchEvent(new Event('input', { bubbles: true }));
-        // Simula o evento de colar
-        const dataTransfer = new DataTransfer();
-        dataTransfer.setData('text/plain', outputText);
-        const pasteEvent = new ClipboardEvent('paste', {
-            clipboardData: dataTransfer,
-            bubbles: true
-        });
-        chatInput.dispatchEvent(pasteEvent);
-        resultArea.innerText = INITIAL_RESULT_MESSAGE;
-        textarea.value = '';
-        //sendToWhatsAppButton.disabled = true;
-        panel.style.display = 'none';
-    } else {
-        alertPersonalizado("Campo de mensagem do WhatsApp não encontrado. Certifique-se de que está na conversa certa!",4000);
-    }
-};
-
-// Função que chama a OpenAI
 async function sendToOpenAI(text) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
@@ -462,130 +495,144 @@ async function sendToOpenAI(text) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                text: text
-            }),
+            body: JSON.stringify({ text }),
             signal: controller.signal
         });
 
         if (!response.ok) {
-            throw new Error("Erro ao chamar API");
+            throw new Error(`Erro ao chamar API (${response.status})`);
         }
 
         const data = await response.json();
 
         if (!data || !data.rewrittenText) {
-            throw new Error("Resposta inválida da API");
+            throw new Error("Resposta invalida da API");
         }
 
         return data.rewrittenText;
     } catch (error) {
+        if (error.name === "AbortError") {
+            throw new Error("Tempo limite excedido ao chamar a API.");
+        }
+
         throw new Error(API_OFFLINE_MESSAGE);
     } finally {
         clearTimeout(timeoutId);
     }
 }
 
-// alertPersonalizado personalizado
+function showToast(message, time) {
+    let toast = document.getElementById("alertPersonalizado");
 
-function alertPersonalizado(message,time) {
-    let alertPersonalizado = document.getElementById("alertPersonalizado");
-    
-    if (!alertPersonalizado) {
-        alertPersonalizado = document.createElement("div");
-        alertPersonalizado.id = "alertPersonalizado";
-        alertPersonalizado.style = `
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #333;
-        color: #fff;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        z-index: 1000;
-        opacity: 0;
-        transition: opacity 0.3s;
-      `;
-      document.body.appendChild(alertPersonalizado);
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "alertPersonalizado";
+        toast.style.position = "fixed";
+        toast.style.bottom = "30px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.backgroundColor = "#333";
+        toast.style.color = "#fff";
+        toast.style.padding = "16px 24px";
+        toast.style.borderRadius = "8px";
+        toast.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
+        toast.style.zIndex = "2147483647";
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity 0.3s";
+        document.body.appendChild(toast);
     }
-  
-    alertPersonalizado.textContent = message;
-    alertPersonalizado.style.opacity = "1";
-  
-    setTimeout(() => {
-        alertPersonalizado.style.opacity = "0";
-        alertPersonalizado.remove(); 
+
+    if (toastTimeoutId) {
+        clearTimeout(toastTimeoutId);
+    }
+
+    toast.textContent = message;
+    toast.style.opacity = "1";
+
+    toastTimeoutId = window.setTimeout(() => {
+        hideToast();
     }, time);
-  };
+}
 
+function hideToast() {
+    const toast = document.getElementById("alertPersonalizado");
 
-function alertPersonalizadoClose() {
-    let alertPersonalizado2 = document.getElementById("alertPersonalizado");
-    
-    if (!alertPersonalizado2) {
-        alertPersonalizado2 = document.createElement("div");
-        alertPersonalizado2.id = "alertPersonalizado";
-        alertPersonalizado2.style = `
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(0, 0, 0, 0);
-        color: #fff;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-        z-index: 1000;
-        opacity: 0;
-        transition: opacity 0.3s;
-      `;
-      document.body.appendChild(alertPersonalizado2);
+    if (!toast) {
+        return;
     }
-    alertPersonalizado2.style.opacity = "1";
 
-    setTimeout(() => {
-        alertPersonalizado2.style.opacity = "0";
-        alertPersonalizado2.remove(); 
-    }, 1);
-  };
+    toast.style.opacity = "0";
 
+    window.setTimeout(() => {
+        toast.remove();
+    }, 300);
+}
 
-  
-// Adiciona as teclas de atalho
-  const ctrla = new Set();
-  document.addEventListener('keydown', (event) => {
-  ctrla.add(event.key);
-  if (panel.style.display === 'none' && ctrla.has('Control') && ctrla.has('q')) {
-      event.preventDefault(); // evita o comportamento padrão (salvar página)
-      toggleButton.click(); 
-  }
-  });
-      document.addEventListener('keyup', (event) => {
-      ctrla.delete(event.key);
-  }); 
+function resetPanel() {
+    panel.style.display = "none";
+    resultArea.innerText = INITIAL_RESULT_MESSAGE;
+    textarea.value = "";
+    formalizeButton.innerText = "Formalizar";
+    pendingReplacement = null;
+}
 
-  const ctrlq = new Set();
-  document.addEventListener('keydown', (event) => {
-  ctrlq.add(event.key);
-  if (panel.style.display === 'block' && ctrlq.has('Control') && ctrlq.has('q')) {
-      event.preventDefault(); // evita o comportamento padrão (salvar página)
-      sendToWhatsAppButton.click(); 
-  }
-  });
-      document.addEventListener('keyup', (event) => {
-      ctrlq.delete(event.key);
-  }); 
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
 
-  const ctrly = new Set();
-  document.addEventListener('keydown', (event) => {
-  ctrly.add(event.key);
-  if (panel.style.display === 'block' && ctrly.has('Control') && ctrly.has('y')) {
-      event.preventDefault(); // evita o comportamento padrão (salvar página)
-      formalizeButton.click(); 
-  }
-  });
-      document.addEventListener('keyup', (event) => {
-      ctrly.delete(event.key);
-  }); 
+function getStorageArea() {
+    return globalThis.chrome?.storage?.local || null;
+}
+
+async function savePositions() {
+    const buttonPosition = {
+        left: parseInt(toggleButton.style.left, 10),
+        top: parseInt(toggleButton.style.top, 10)
+    };
+    const panelPosition = {
+        left: parseInt(panel.style.left, 10),
+        top: parseInt(panel.style.top, 10)
+    };
+    const storage = getStorageArea();
+
+    if (storage) {
+        await storage.set({
+            [STORAGE_KEYS.button]: buttonPosition,
+            [STORAGE_KEYS.panel]: panelPosition
+        });
+        return;
+    }
+
+    localStorage.setItem(STORAGE_KEYS.button, JSON.stringify(buttonPosition));
+    localStorage.setItem(STORAGE_KEYS.panel, JSON.stringify(panelPosition));
+}
+
+async function loadSavedPositions() {
+    const storage = getStorageArea();
+    let savedButtonPosition = null;
+    let savedPanelPosition = null;
+
+    if (storage) {
+        const savedPositions = await storage.get([STORAGE_KEYS.button, STORAGE_KEYS.panel]);
+        savedButtonPosition = savedPositions[STORAGE_KEYS.button];
+        savedPanelPosition = savedPositions[STORAGE_KEYS.panel];
+    } else {
+        savedButtonPosition = JSON.parse(localStorage.getItem(STORAGE_KEYS.button) || "null");
+        savedPanelPosition = JSON.parse(localStorage.getItem(STORAGE_KEYS.panel) || "null");
+    }
+
+    if (savedButtonPosition?.left >= 0 && savedButtonPosition?.top >= 0) {
+        toggleButton.style.left = `${savedButtonPosition.left}px`;
+        toggleButton.style.top = `${savedButtonPosition.top}px`;
+        toggleButton.style.right = "auto";
+        toggleButton.style.bottom = "auto";
+    }
+
+    if (savedPanelPosition?.left >= 0 && savedPanelPosition?.top >= 0) {
+        panel.style.left = `${savedPanelPosition.left}px`;
+        panel.style.top = `${savedPanelPosition.top}px`;
+        panel.style.right = "auto";
+        panel.style.bottom = "auto";
+    }
+}
+})();

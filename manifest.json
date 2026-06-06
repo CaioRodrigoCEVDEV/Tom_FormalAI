@@ -2,8 +2,8 @@
     "manifest_version": 3,
     "name": "Tom Formal - WhatsApp",
     "short_name": "Tom FormalAI",
-    "version": "1.9.0",
-    "description": "Um bot de WhatsApp que formaliza mensagens automaticamente com inteligência artificial.",
+    "version": "1.9.1",
+    "description": "Um bot de WhatsApp que formaliza mensagens automaticamente com inteligencia artificial.",
     "permissions": ["storage"],
     "action": {
         "default_title": "TomFormal",
@@ -14,20 +14,14 @@
         }
     },
     "content_scripts": [
-  {
-    "matches": [
-      "https://web.whatsapp.com/*",
-      "https://brsistemas.whatsprofissional.digital/*",
-      "https://i3chat.com.br/*" 
-          ],
-    "type": "module",
-    "js": ["/js/content.js"],
-    "web_accessible_resources": [
-      {
-        "resources": ["js/theme.js"],
-        "matches": ["<all_urls>"]
-      }
+        {
+            "matches": [
+                "https://web.whatsapp.com/*",
+                "https://brsistemas.whatsprofissional.digital/*",
+                "https://i3chat.com.br/*"
+            ],
+            "type": "module",
+            "js": ["/js/content.js"]
+        }
     ]
-  }
- ]
 }
